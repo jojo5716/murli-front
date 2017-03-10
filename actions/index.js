@@ -18,7 +18,17 @@ function changeCheckOut(date) {
     };
 }
 
+function changePages(pages) {
+    return {
+        type: actions.changePages,
+        payload: {
+            pages
+        }
+    };
+}
+
 module.exports = {
     changeCheckIn,
-    changeCheckOut
+    changeCheckOut,
+    changePages
 };

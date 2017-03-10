@@ -1,5 +1,7 @@
 export const actions = {
     changeCheckIn: 'CHANGECHECKIN',
-    changeCheckOut: 'CHANGECHECKOUT'
+    changeCheckOut: 'CHANGECHECKOUT',
+    changePages: 'CHANGEPAGES'
+
 
 };
