@@ -1,6 +1,6 @@
 import { actions } from '../actions/constants';
 
-const initialPages = { pages: 'pages' };
+const initialPages = { pages: [] };
 
 export function getPages(state = initialPages, action = {}) {
     switch (action.type) {

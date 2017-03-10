@@ -11,6 +11,8 @@ function getPagesByDate(checkIn, checkOut) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
         }
+    }).then(response => {
+        return response.json();
     });
 }
 

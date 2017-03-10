@@ -2,16 +2,38 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import reducers from '../reducers/';
-import { changeCheckIn, changeCheckOut } from '../actions/';
-import { dateFormat } from '../config';
+import { getDateFormat } from '../helpers/dates';
+
+import { changeCheckIn, changeCheckOut, changePages } from '../actions/';
+
+import { hourMightnight, hourEndDay, dateFormat } from '../config';
+
+// Services
+import { getPagesByDate } from '../services/pages';
+
 
 class BreadCrumb extends React.Component {
 
+    getPages() {
+        const checkIn = getDateFormat(this.props.checkIn, hourMightnight);
+        const checkOut = getDateFormat(this.props.checkOut, hourEndDay);
+
+        getPagesByDate(checkIn, checkOut).then(navigationPages => {
+            this.props.dispatch(changePages(navigationPages.navigationPages));
+        });
+    }
+
+    componentDidMount() {
+        this.getPages();
+    }
+
     onChangeCheckIn(event) {
+        this.getPages();
         this.props.dispatch(changeCheckIn(event.target.value));
     }
 
     onChangeCheckOut(event) {
+        this.getPages();
         this.props.dispatch(changeCheckOut(event.target.value));
     }
 
@@ -88,7 +110,8 @@ class BreadCrumb extends React.Component {
 const mapStateToProps = (state) => {
     return {
         checkIn: reducers(state).dateCheckIn.date,
-        checkOut: reducers(state).dateCheckOut.date
+        checkOut: reducers(state).dateCheckOut.date,
+        pages: reducers(state).getPages.pages
     };
 };
 

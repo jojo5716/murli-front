@@ -7,7 +7,7 @@ import reducers from '../reducers/';
 class Home extends React.Component {
 
     render() {
-
+        console.log(this.props)
         return (
             <div className="container-fluid">
                 <h1>Home! -> { this.props.pages }</h1>
@@ -20,6 +20,7 @@ class Home extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
+        checkIn: reducers(state).dateCheckIn.date,
         pages: reducers(state).getPages.pages
     };
 };
