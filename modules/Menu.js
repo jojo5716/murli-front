@@ -1,4 +1,5 @@
 import React from 'react';
+
 import NavLink from './NavLink';
 
 export default class Menu extends React.Component {
@@ -44,3 +45,4 @@ export default class Menu extends React.Component {
         );
     }
 }
+
