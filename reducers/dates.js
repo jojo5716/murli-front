@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { dateFormat } from '../config';
 
 import { actions } from '../actions/constants';
 import { getDateFormat } from '../helpers/dates';
@@ -6,8 +7,8 @@ import { getDateFormat } from '../helpers/dates';
 const today = moment();
 const oneMonthAgo = moment(today).subtract(1, 'months');
 
-const initialStateCheckIn = { date: today.format('YYYY-MM-DD') };
-const initialStateCheckOut = { date: oneMonthAgo.format('YYYY-MM-DD') };
+const initialStateCheckIn = { date: today.format(dateFormat) };
+const initialStateCheckOut = { date: oneMonthAgo.format(dateFormat) };
 
 export function dateCheckIn(state = initialStateCheckIn, action = {}) {
     switch (action.type) {

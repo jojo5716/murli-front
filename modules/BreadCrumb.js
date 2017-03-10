@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import reducers from '../reducers/';
 import { changeCheckIn, changeCheckOut } from '../actions/';
+import { dateFormat } from '../config';
 
 class BreadCrumb extends React.Component {
 
@@ -15,6 +16,8 @@ class BreadCrumb extends React.Component {
     }
 
     render() {
+        const datesFormatLower = dateFormat.toLowerCase();
+
         return (
             <div className="rs-dashhead m-b-lg">
                 <div className="rs-dashhead-content">
@@ -40,8 +43,8 @@ class BreadCrumb extends React.Component {
                                     onChange={this.onChangeCheckIn.bind(this)}
                                     className="form-control rs-datepicker"
                                     id="checkInInput"
-                                    data-date-format="dd-mm-yyyy"
-                                    placeholder="YYYY-MM-DD"
+                                    data-date-format={datesFormatLower}
+                                    placeholder={dateFormat}
                                     defaultValue={ this.props.checkIn }
                                     />
                                 <span className="fa fa-calendar form-control-feedback" aria-hidden="true"/>
@@ -57,8 +60,8 @@ class BreadCrumb extends React.Component {
                                     onChange={this.onChangeCheckOut.bind(this)}
                                     className="form-control rs-datepicker"
                                     id="checkOutInput"
-                                    data-date-format="dd-mm-yyyy"
-                                    placeholder="YYYY-MM-DD"
+                                    data-date-format={datesFormatLower}
+                                    placeholder={dateFormat}
                                     defaultValue={ this.props.checkOut }
                                     />
                                 <span className="fa fa-calendar form-control-feedback" aria-hidden="true"/>
