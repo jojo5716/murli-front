@@ -33,8 +33,8 @@ export default class Menu extends React.Component {
                         <ul>
                             <li>
                                 <NavLink to="/about">
-                                    <span className="icon-home rs-icon-menu"/>
-                                    % Devices on all pages
+                                    <span className="icon-chart-pie rs-icon-menu"/>
+                                     Devices on all pages
                                 </NavLink>
                             </li>
                         </ul>

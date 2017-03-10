@@ -2,6 +2,7 @@ import React from 'react';
 import Menu from './Menu';
 import Header from './Header';
 import BreadCrumb from './BreadCrumb';
+import Footer from './Footer';
 
 export default class App extends React.Component {
     render() {
@@ -17,7 +18,7 @@ export default class App extends React.Component {
                         </div>
                     </div>
                 </article>
-
+                <Footer/>
             </div>
         );
     }

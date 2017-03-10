@@ -19,8 +19,7 @@ export default class App extends React.Component {
                         <button
                             type="button"
                             className="navbar-toggle collapsed sidebar-toggle"
-                            id="rs-sidebar-toggle-mobile"
-                        >
+                            id="rs-sidebar-toggle-mobile">
                             <span className="icon-bar"/>
                             <span className="icon-bar"/>
                             <span className="icon-bar"/>
@@ -30,8 +29,7 @@ export default class App extends React.Component {
                             className="navbar-toggle collapsed"
                             data-toggle="collapse"
                             data-target="#roosa-nav-collapse"
-                            aria-expanded="false"
-                        >
+                            aria-expanded="false">
                             <span className="gcon gcon-dots-three-vertical f-s-sm"/>
                         </button>
                     </div>
