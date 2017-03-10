@@ -1,21 +1,23 @@
 import React from 'react';
-import NavLink from './NavLink';
+import Menu from './Menu';
+import Header from './Header';
+import BreadCrumb from './BreadCrumb';
 
 export default class App extends React.Component {
     render() {
         return (
             <div>
-                <h1>React Router Tutorial</h1>
+                <Header/>
+                <Menu/>
+                <article className="rs-content-wrapper">
+                    <div className="rs-content">
+                        <div className="rs-inner">
+                            <BreadCrumb/>
+                            {this.props.children}
+                        </div>
+                    </div>
+                </article>
 
-                <ul role="nav">
-                    <li>
-                        <NavLink to="/" onlyActiveOnIndex>Home</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/about">About</NavLink>
-                    </li>
-                </ul>
-                {this.props.children}
             </div>
         );
     }

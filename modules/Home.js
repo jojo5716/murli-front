@@ -3,7 +3,9 @@ import React from 'react';
 export default class App extends React.Component {
     render() {
         return (
-            <h1>HOME!!</h1>
+            <div className="container-fluid">
+                <h1>Home!</h1>
+            </div>
         );
     }
 }
