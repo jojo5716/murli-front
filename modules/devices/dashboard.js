@@ -43,19 +43,18 @@ class DashboardDevice extends React.Component {
 						</div>
 					</div>
 					<div className="panel-body rs-col-stacked full-width-on-mobile border-items borderless m-a-0">
-                    <ul className="list-group m-b-0">
-						{Object.keys(osData.names).map((osName, index) => {
-                            return (
-                                <li className="list-group-item" key={index}>
-                                    {osName}
-                                    <span className="badge">
-                                    {osData.names[osName].visits}
-                                    </span>
-                                </li>
-                            )
-                        })}
-                    </ul>
-
+                        <ul className="list-group m-b-0">
+    						{Object.keys(osData.names).map((osName, index) => {
+                                return (
+                                    <li className="list-group-item" key={index}>
+                                        {osName}
+                                        <span className="badge">
+                                        {osData.names[osName].visits}
+                                        </span>
+                                    </li>
+                                )
+                            })}
+                        </ul>
 					</div>
 				</div>
             );

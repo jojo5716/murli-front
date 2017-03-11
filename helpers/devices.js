@@ -56,13 +56,19 @@ export function getAllDevices(pages) {
         if(!devices[deviceBrowserName].os.names[deviceOSName]) {
             devices[deviceBrowserName].os.names[deviceOSName] = {
                 versions: new Set(),
-                visits: 0
+                visits: 0,
+                bookings: []
             };
         }
 
         devices[deviceBrowserName].browser.visits += 1;
         devices[deviceBrowserName].os.names[deviceOSName].visits += 1;
         devices[deviceBrowserName].os.names[deviceOSName].versions.add(deviceOSVersion);
+
+        if (user.bookings.length > 0) {
+            devices[deviceBrowserName].os.names[deviceOSName].bookings.push(user.bookings);
+        }
+
     }
     return devices;
 }
