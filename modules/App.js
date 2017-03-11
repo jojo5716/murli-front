@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+// Components
 import Menu from './Menu';
 import Header from './Header';
 import BreadCrumb from './BreadCrumb';

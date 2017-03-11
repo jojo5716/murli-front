@@ -1,17 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import reducers from '../reducers/';
 
 
 class Home extends React.Component {
-
     render() {
-        console.log(this.props)
         return (
-            <div className="container-fluid">
-                <h1>Home! -> { this.props.pages }</h1>
-            </div>
+            <h1>Home</h1>
         );
     }
 }

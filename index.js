@@ -5,9 +5,11 @@ import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 
+// Components
 import App from './modules/App';
 import Home from './modules/Home';
 import About from './modules/About';
+import DashboardDevice from './modules/devices/dashboard';
 
 import reducers from './reducers';
 
@@ -19,6 +21,7 @@ render((
             <Route path="/" component={App}>
                 <IndexRoute component={Home}/>
                 <Route path="/about" component={About}/>
+                <Route path="/devices/dashboard" component={DashboardDevice}/>
 
                 <Route path="*" component={Home} />
 

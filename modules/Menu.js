@@ -27,13 +27,13 @@ export default class Menu extends React.Component {
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <span className="badge badge-danger">6</span>
+                            <span className="badge badge-danger">1</span>
                             <span className="gcon gcon-browser rs-icon-menu"/>
                             Devices
                         </a>
                         <ul>
                             <li>
-                                <NavLink to="/about">
+                                <NavLink to="/devices/dashboard">
                                     <span className="icon-chart-pie rs-icon-menu"/>
                                      Devices on all pages
                                 </NavLink>

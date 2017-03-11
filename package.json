@@ -19,17 +19,23 @@
   },
   "homepage": "https://github.com/jojo5716/murli-front#readme",
   "dependencies": {
+    "chart.js": "^2.5.0",
     "compression": "^1.6.1",
     "express": "^4.15.2",
     "if-env": "^1.0.0",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.17.1",
     "react": "^0.14.7",
+    "react-chartjs": "^0.8.0",
+    "react-chartjs-2": "^2.0.5",
     "react-dom": "^0.14.7",
+    "react-google-charts": "^1.5.2",
     "react-redux": "^5.0.3",
     "react-router": "^2.0.0",
+    "recharts": "^0.21.2",
     "redux": "^3.6.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "user-agent-parser": "^0.6.0"
   },
   "devDependencies": {
     "babel-core": "^6.5.1",
