@@ -61,6 +61,40 @@ class DashboardDevice extends React.Component {
         })
     }
 
+
+    generateBookingTable(pages) {
+        return Object.keys(pages).map((browserName, index) => {
+            const osData = pages[browserName].os;
+
+            return (
+                <div className="panel panel-plain" key={index}>
+					<div className="panel-heading">
+						<h3 className="panel-title">{browserName}</h3>
+						<div className="panel-toolbar v-centered" >
+							<span className="fa fa-twitter text-info"/>
+						</div>
+					</div>
+					<div className="panel-body rs-col-stacked full-width-on-mobile border-items borderless m-a-0">
+                        <ul className="list-group m-b-0">
+    						{Object.keys(osData.names).map((osName, index) => {
+                                const bookings = osData.names[osName].bookings;
+                                return bookings.length > 0 ?
+                                    (
+                                        <li className="list-group-item" key={index}>
+                                            {osName}
+                                            <span className="badge">
+                                            {bookings.length}
+                                            </span>
+                                        </li>
+                                    )
+                                : null;
+                            })}
+                        </ul>
+					</div>
+				</div>
+            );
+        })
+    }
     render() {
         const pages = this.props.pages;
         const pieData = getAllDevices(pages);
@@ -74,6 +108,7 @@ class DashboardDevice extends React.Component {
         const colors = generateColorsToPie(pages.length);
         const percentTableBrowsers = this.generateBrowserTable(pieDataPercent);
         const percentTableOSs = this.generateOSTable(pieData);
+        const bookingTableOSs = this.generateBookingTable(pieData);
 
         return (
             <div className="container-fluid">
@@ -134,6 +169,19 @@ class DashboardDevice extends React.Component {
                             </table>
                             </div>
                         </div>
+
+                        <div className="stacked-item panel panel-plain">
+                            <div className="panel-heading borderless">
+                                <h3 className="panel-title">Bookings by device os</h3>
+                                <div className="panel-toolbar v-centered" >
+                                    <p className="subtitle text-uppercase m-a-0">All pages</p>
+                                </div>
+                            </div>
+                            <div className="panel-body">
+                                { bookingTableOSs }
+                            </div>
+                        </div>
+
                     </div>
                     <div className="col-md-6">
                         <div className="stacked-item panel panel-plain">
