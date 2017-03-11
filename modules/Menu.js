@@ -37,6 +37,10 @@ export default class Menu extends React.Component {
                                     <span className="icon-chart-pie rs-icon-menu"/>
                                      Devices on all pages
                                 </NavLink>
+                                <NavLink to="/devices/per-pages">
+                                    <span className="icon-chart-pie rs-icon-menu"/>
+                                     Devices per page
+                                </NavLink>
                             </li>
                         </ul>
                     </li>

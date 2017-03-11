@@ -10,6 +10,7 @@ import App from './modules/App';
 import Home from './modules/Home';
 import About from './modules/About';
 import DashboardDevice from './modules/devices/dashboard';
+import PerPagesDevice from './modules/devices/PerPagesDevice';
 
 import reducers from './reducers';
 
@@ -22,6 +23,7 @@ render((
                 <IndexRoute component={Home}/>
                 <Route path="/about" component={About}/>
                 <Route path="/devices/dashboard" component={DashboardDevice}/>
+                <Route path="/devices/per-pages" component={PerPagesDevice}/>
 
                 <Route path="*" component={Home} />
 
