@@ -29,9 +29,6 @@ class App extends React.Component {
     }
 }
 
-
-
-
 const mapStateToProps = (state) => {
     return {
         checkIn: reducers(state).dateCheckIn.date,

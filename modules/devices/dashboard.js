@@ -24,7 +24,11 @@ class DashboardDevice extends React.Component {
                 <tr key={index}>
                     <td>{browser.name}</td>
                     <td>{browser.visits}</td>
-                    <td>{browser.percent}%</td>
+                    <td>
+                        <span className="label label-success m-a-0 p-x pull-right">
+                            {browser.percent}%
+                        </span>
+                    </td>
                 </tr>
             );
         })
@@ -48,9 +52,10 @@ class DashboardDevice extends React.Component {
                                 return (
                                     <li className="list-group-item" key={index}>
                                         {osName}
-                                        <span className="badge">
-                                        {osData.names[osName].visits}
+                                        <span className="label label-success m-a-0 p-x pull-right">
+                                        {osData.names[osName].visits} visits.
                                         </span>
+
                                     </li>
                                 )
                             })}
@@ -82,7 +87,7 @@ class DashboardDevice extends React.Component {
                                     (
                                         <li className="list-group-item" key={index}>
                                             {osName}
-                                            <span className="badge">
+                                            <span className="label label-success m-a-0 p-x pull-right">
                                             {bookings.length}
                                             </span>
                                         </li>
@@ -95,6 +100,7 @@ class DashboardDevice extends React.Component {
             );
         })
     }
+
     render() {
         const pages = this.props.pages;
         const pieData = getAllDevices(pages);
@@ -186,7 +192,7 @@ class DashboardDevice extends React.Component {
                     <div className="col-md-6">
                         <div className="stacked-item panel panel-plain">
                             <div className="panel-heading borderless">
-                                <h3 className="panel-title">% Visits by OS</h3>
+                                <h3 className="panel-title">No. Visits by OS</h3>
                                 <div className="panel-toolbar v-centered" >
                                     <p className="subtitle text-uppercase m-a-0">All pages</p>
                                 </div>
