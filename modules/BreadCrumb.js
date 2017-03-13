@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import DatePicker from 'react-bootstrap-date-picker'
+import DatePicker from 'react-bootstrap-date-picker';
+import 'react-dates/lib/css/_datepicker.css';
+
 import moment from 'moment';
 
 import reducers from '../reducers/';
@@ -10,8 +12,6 @@ import { hourMightnight, hourEndDay, dateFormat } from '../config';
 
 // Services
 import { getPagesByDate } from '../services/pages';
-
-import 'react-dates/lib/css/_datepicker.css';
 
 
 class BreadCrumb extends React.Component {
@@ -26,6 +26,7 @@ class BreadCrumb extends React.Component {
     }
 
     componentDidMount() {
+        this.getPages();
     }
 
     onChangeCheckIn(value) {
@@ -44,7 +45,6 @@ class BreadCrumb extends React.Component {
     }
 
     render() {
-        const datesFormatLower = dateFormat.toLowerCase();
         const checkIn = `${this.props.checkIn}T00:00:00.000Z`;
         const checkOut = `${this.props.checkOut}T00:00:00.000Z`;
 

@@ -12,8 +12,7 @@ class Home extends React.Component {
 }
 
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
         checkIn: reducers(state).dateCheckIn.date,
         pages: reducers(state).getPages.pages
@@ -21,7 +20,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({ dispatch });
-
 
 export default connect(
     mapStateToProps,

@@ -47,19 +47,28 @@ class DashboardDevice extends React.Component {
 						</div>
 					</div>
 					<div className="panel-body rs-col-stacked full-width-on-mobile border-items borderless m-a-0">
-                        <ul className="list-group m-b-0">
-    						{Object.keys(osData.names).map((osName, index) => {
+                        <table className="table rs-table table-striped table-hover table-b-t">
+                            <thead>
+                            <tr>
+                                <th>Browser name</th>
+                                <th># Visits</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {Object.keys(osData.names).map((osName, index) => {
                                 return (
-                                    <li className="list-group-item" key={index}>
-                                        {osName}
-                                        <span className="label label-success m-a-0 p-x pull-right">
-                                        {osData.names[osName].visits} visits.
-                                        </span>
-
-                                    </li>
+                                    <tr key={index}>
+                                        <td>{osName}</td>
+                                        <td>
+                                            <span className="label label-success m-a-0 p-x pull-right">
+                                                {osData.names[osName].visits}
+                                            </span>
+                                        </td>
+                                    </tr>
                                 )
                             })}
-                        </ul>
+                            </tbody>
+                        </table>
 					</div>
 				</div>
             );
@@ -161,18 +170,18 @@ class DashboardDevice extends React.Component {
                                 </div>
                             </div>
                             <div className="panel-body">
-                            <table className="table rs-table table-striped table-hover table-b-t">
-                                <thead>
-                                    <tr>
-                                        <th>Browser name</th>
-                                        <th># Devices</th>
-                                        <th>%</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    { percentTableBrowsers }
-                                </tbody>
-                            </table>
+                                <table className="table rs-table table-striped table-hover table-b-t">
+                                    <thead>
+                                        <tr>
+                                            <th>Browser name</th>
+                                            <th># Devices</th>
+                                            <th>%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        { percentTableBrowsers }
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 

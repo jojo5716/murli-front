@@ -17,8 +17,12 @@
   "bugs": {
     "url": "https://github.com/jojo5716/murli-front/issues"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "homepage": "https://github.com/jojo5716/murli-front#readme",
   "dependencies": {
+    "babel-polyfill": "^6.23.0",
     "chart.js": "^2.5.0",
     "compression": "^1.6.1",
     "express": "^4.15.2",
@@ -28,19 +32,14 @@
     "react": "^0.14.7",
     "react-bootstrap": "^0.30.8",
     "react-bootstrap-date-picker": "^4.0.0",
-    "react-chartjs": "^0.8.0",
     "react-chartjs-2": "^2.0.5",
-    "react-datepicker": "^0.41.1",
     "react-dates": "^8.1.1",
     "react-dom": "^0.14.7",
-    "react-google-charts": "^1.5.2",
     "react-redux": "^5.0.3",
     "react-router": "^2.0.0",
     "react-spinkit": "^2.1.1",
-    "recharts": "^0.21.2",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
-    "simple-reactjs-datepicker": "^1.0.8",
     "user-agent-parser": "^0.6.0"
   },
   "devDependencies": {
