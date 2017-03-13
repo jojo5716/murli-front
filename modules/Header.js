@@ -12,7 +12,7 @@ export default class App extends React.Component {
                             <a className="navbar-brand" href="index.html">
                                 <img
                                     alt="Brand"
-                                    src="http://bookcore.backhotelengine.com/crs/static/imgs/logo_pre.png"
+                                    src="https://bookcore.backhotelengine.com/crs/static/imgs/logo_pre.png"
                                 />
                             </a>
                         </div>

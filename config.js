@@ -8,5 +8,6 @@ const url = 'http://qa.roiback.com:8000';
 export const apiURL = {
     base: url,
     getAllPages: `${url}/pages`,
-    getPagesByDate: `${url}/pages/createAt/{0}/{1}`
+    getPagesByDate: `${url}/pages/createAt/{0}/{1}`,
+    getProjects: `${url}/projects`
 };

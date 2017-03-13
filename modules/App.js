@@ -8,8 +8,23 @@ import BreadCrumb from './BreadCrumb';
 import Footer from './Footer';
 
 import reducers from '../reducers/';
+import { getDateFormat } from '../helpers/dates';
+import { changeCheckIn, changeCheckOut, changePages, loadProjects } from '../actions/';
+import { hourMightnight, hourEndDay, dateFormat } from '../config';
+
+// Services
+import { getPagesByDate } from '../services/pages';
+import { getProjects } from '../services/project';
+
 
 class App extends React.Component {
+
+    componentDidMount() {
+        getProjects().then(projects => {
+            this.props.dispatch(loadProjects(projects.projects));
+        });
+    }
+
     render() {
         return (
             <div>
@@ -33,7 +48,8 @@ const mapStateToProps = (state) => {
     return {
         checkIn: reducers(state).dateCheckIn.date,
         checkOut: reducers(state).dateCheckOut.date,
-        pages: reducers(state).getPages.pages
+        pages: reducers(state).getPages.pages,
+        projects: reducers(state).loadProjects.projects
     };
 };
 

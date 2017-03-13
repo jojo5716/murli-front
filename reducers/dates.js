@@ -10,6 +10,7 @@ const oneMonthAgo = moment(today).subtract(1, 'months');
 const initialStateCheckIn = { date: oneMonthAgo.format(dateFormat) };
 const initialStateCheckOut = { date: today.format(dateFormat) };
 
+
 export function dateCheckIn(state = initialStateCheckIn, action = {}) {
     switch (action.type) {
         case actions.changeCheckIn:

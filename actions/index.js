@@ -27,8 +27,27 @@ function changePages(pages) {
     };
 }
 
+function loadProjects(projects) {
+    return {
+        type: actions.loadProjects,
+        payload: {
+            projects
+        }
+    };
+}
+
+function changeProject(projectSelected) {
+    return {
+        type: actions.changeProject,
+        payload: {
+            projectSelected
+        }
+    };
+}
 module.exports = {
     changeCheckIn,
     changeCheckOut,
-    changePages
+    changePages,
+    loadProjects,
+    changeProject
 };

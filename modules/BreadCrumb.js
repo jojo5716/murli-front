@@ -7,16 +7,15 @@ import moment from 'moment';
 
 import reducers from '../reducers/';
 import { getDateFormat } from '../helpers/dates';
-import { changeCheckIn, changeCheckOut, changePages } from '../actions/';
-import { hourMightnight, hourEndDay, dateFormat } from '../config';
+import { changeCheckIn, changeCheckOut, changePages, loadProjects, changeProject } from '../actions/';
+import { hourMightnight, dateFormat, hourEndDay } from '../config';
 
 // Services
 import { getPagesByDate } from '../services/pages';
 
 
 class BreadCrumb extends React.Component {
-
-    getPages() {
+    getPagesFromFetch() {
         const checkIn = getDateFormat(this.props.checkIn, hourMightnight);
         const checkOut = getDateFormat(this.props.checkOut, hourEndDay);
 
@@ -25,28 +24,44 @@ class BreadCrumb extends React.Component {
         });
     }
 
-    componentDidMount() {
-        this.getPages();
-    }
-
     onChangeCheckIn(value) {
-        this.getPages();
-        const date = moment(value).format('YYYY-MM-DD');
-
+        this.getPagesFromFetch();
+        const date = moment(value).format(dateFormat);
         this.props.dispatch(changeCheckIn(date));
-        this.getPages();
+        this.getPagesFromFetch();
     }
 
     onChangeCheckOut(value) {
-        const date = moment(value).format('YYYY-MM-DD');
-
+        const date = moment(value).format(dateFormat);
         this.props.dispatch(changeCheckOut(date));
-        this.getPages();
+        this.getPagesFromFetch();
+    }
+
+    onChangeProject(event) {
+        this.props.dispatch(changeProject(event.target.value));
+    }
+
+    renderProjectsList() {
+        const html = [];
+        for (let i = 0; i < this.props.projects.length; i += 1) {
+            const project = this.props.projects[i];
+
+            html.push(
+                <option value={project._id} key={i}>{project.name}</option>
+            );
+        }
+        return (
+            <select className="form-control" onChange={this.onChangeProject.bind(this)}>
+                <option disabled="disabled">Select a project</option>
+                {html}
+            </select>
+        );
     }
 
     render() {
-        const checkIn = `${this.props.checkIn}T00:00:00.000Z`;
-        const checkOut = `${this.props.checkOut}T00:00:00.000Z`;
+        const checkIn = `${this.props.checkIn}${hourMightnight}`;
+        const checkOut = `${this.props.checkOut}${hourMightnight}`;
+        console.log(`PROJECT SELECTED: ${this.props.projectSelected}`);
 
         return (
             <div className="rs-dashhead m-b-lg">
@@ -56,7 +71,10 @@ class BreadCrumb extends React.Component {
                             Dashboard
                         </h6>
                         <h3 className="rs-dashhead-title m-t">
-                            Hotel Prince park
+                            <div className="col-md-6">
+                                {this.renderProjectsList()}
+                            </div>
+
                         </h3>
                         <div className="toggle-toolbar-btn">
                             <span className="fa fa-sort"/>
@@ -84,7 +102,7 @@ class BreadCrumb extends React.Component {
                                 <DatePicker
                                     id="checkInOut"
                                     value={checkOut}
-                                    dateFormat="YYYY-MM-DD"
+                                    dateFormat={dateFormat}
                                     onChange={this.onChangeCheckOut.bind(this)}
                                 />
                                 <span className="fa fa-calendar form-control-feedback" aria-hidden="true"/>
@@ -95,7 +113,7 @@ class BreadCrumb extends React.Component {
                 <ol className="breadcrumb">
                     <li>
                         <a href="javascript:void(0);">
-                            <i className="fa fa-home m-r"/>
+                            <i className="fa fa-home m-r" />
                             Home
                         </a>
                     </li>
@@ -112,7 +130,9 @@ const mapStateToProps = (state) => {
     return {
         checkIn: reducers(state).dateCheckIn.date,
         checkOut: reducers(state).dateCheckOut.date,
-        pages: reducers(state).getPages.pages
+        pages: reducers(state).getPages.pages,
+        projects: reducers(state).loadProjects.projects,
+        projectSelected: reducers(state).loadProjects.projectSelected
     };
 };
 
