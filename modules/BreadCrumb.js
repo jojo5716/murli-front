@@ -52,7 +52,7 @@ class BreadCrumb extends React.Component {
         }
         return (
             <select className="form-control" onChange={this.onChangeProject.bind(this)}>
-                <option disabled="disabled">Select a project</option>
+                <option disabled="disabled" selected="selected">Select a project</option>
                 {html}
             </select>
         );
@@ -90,8 +90,10 @@ class BreadCrumb extends React.Component {
                                     id="checkInInput"
                                     value={checkIn}
                                     dateFormat="YYYY-MM-DD"
+                                    showClearButton={false}
                                     onChange={this.onChangeCheckIn.bind(this)}
                                 />
+                                <span className="fa fa-calendar-o form-control-feedback" aria-hidden="true"/>
                             </div>
                         </div>
                         <div className="col-md-6">
@@ -103,9 +105,10 @@ class BreadCrumb extends React.Component {
                                     id="checkInOut"
                                     value={checkOut}
                                     dateFormat={dateFormat}
+                                    showClearButton={false}
                                     onChange={this.onChangeCheckOut.bind(this)}
                                 />
-                                <span className="fa fa-calendar form-control-feedback" aria-hidden="true"/>
+                                <span className="fa fa-calendar-o form-control-feedback" aria-hidden="true"/>
                             </div>
                         </div>
                     </div>
