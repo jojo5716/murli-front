@@ -44,10 +44,21 @@ function changeProject(projectSelected) {
         }
     };
 }
+
+function loadingPage(loading = false) {
+        return {
+            type: actions.loadingPage,
+            payload: {
+                loading
+            }
+        };
+}
+
 module.exports = {
     changeCheckIn,
     changeCheckOut,
     changePages,
     loadProjects,
-    changeProject
+    changeProject,
+    loadingPage
 };

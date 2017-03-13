@@ -2,36 +2,49 @@ import React from 'react';
 import { connect } from 'react-redux';
 import DatePicker from 'react-bootstrap-date-picker';
 import 'react-dates/lib/css/_datepicker.css';
-
 import moment from 'moment';
 
 import reducers from '../reducers/';
 import { getDateFormat } from '../helpers/dates';
-import { changeCheckIn, changeCheckOut, changePages, loadProjects, changeProject } from '../actions/';
-import { hourMightnight, dateFormat, hourEndDay } from '../config';
 
+import {
+    changeCheckIn,
+    changeCheckOut,
+    changePages,
+    loadProjects,
+    changeProject,
+    loadingPage
+} from '../actions/';
+
+import { hourMightnight, dateFormat, hourEndDay } from '../config';
 // Services
 import { getPagesByDate } from '../services/pages';
 
 
 class BreadCrumb extends React.Component {
+
     getPagesFromFetch() {
         const checkIn = getDateFormat(this.props.checkIn, hourMightnight);
         const checkOut = getDateFormat(this.props.checkOut, hourEndDay);
 
         getPagesByDate(checkIn, checkOut).then(navigationPages => {
             this.props.dispatch(changePages(navigationPages.navigationPages));
+            this.props.dispatch(loadingPage(false));
         });
     }
 
     onChangeCheckIn(value) {
-        this.getPagesFromFetch();
+        this.props.dispatch(loadingPage(true));
+
         const date = moment(value).format(dateFormat);
         this.props.dispatch(changeCheckIn(date));
         this.getPagesFromFetch();
+
     }
 
     onChangeCheckOut(value) {
+        this.props.dispatch(loadingPage(true));
+
         const date = moment(value).format(dateFormat);
         this.props.dispatch(changeCheckOut(date));
         this.getPagesFromFetch();
@@ -62,6 +75,7 @@ class BreadCrumb extends React.Component {
         const checkIn = `${this.props.checkIn}${hourMightnight}`;
         const checkOut = `${this.props.checkOut}${hourMightnight}`;
         console.log(`PROJECT SELECTED: ${this.props.projectSelected}`);
+        console.log(this.props.projects);
 
         return (
             <div className="rs-dashhead m-b-lg">

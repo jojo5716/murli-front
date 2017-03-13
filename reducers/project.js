@@ -8,7 +8,10 @@ export function loadProjects(state = initialStateProjects, action = {}) {
         case actions.loadProjects:
             return { projects: action.payload.projects };
         case actions.changeProject:
-            return { projectSelected: action.payload.projectSelected };
+            return {
+                projectSelected: action.payload.projectSelected,
+                projects: state.projects
+            };
         default:
             return state;
     }
