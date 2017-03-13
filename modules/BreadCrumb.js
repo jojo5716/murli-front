@@ -52,6 +52,9 @@ class BreadCrumb extends React.Component {
 
     onChangeProject(event) {
         this.props.dispatch(changeProject(event.target.value));
+        if (Object.keys(this.props.pages).length === 0) {
+            this.getPagesFromFetch();
+        }
     }
 
     renderProjectsList() {
