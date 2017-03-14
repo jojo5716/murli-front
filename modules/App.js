@@ -35,13 +35,28 @@ class App extends React.Component {
 
     renderLoading() {
         return (
-            <Spinner spinnerName="three-bounce"/>
+            <div className="row">
+                <div className="col-md-12 loadingContent">
+                    <Spinner spinnerName="three-bounce"/>
+                </div>
+
+            </div>
+
         );
     }
 
     renderProjectNotFound() {
+        const style = { marginTop: '-98.5px', marginBottom: '75px' };
+
         return (
-            <h1>Project not selected!</h1>
+            <div className="special-page-content text-center v-centered" style={style}>
+                <h2 className="f-w-700 heading-text-xl m-a-0">
+                    Without project
+                </h2>
+                <h5 className="f-w-400 f-l-15 text-uppercase text-muted">
+                    Please select a project
+                </h5>
+            </div>
         );
     }
 
@@ -71,6 +86,7 @@ class App extends React.Component {
     }
 }
 
+//
 const mapStateToProps = (state) => {
     return {
         checkIn: reducers(state).dateCheckIn.date,

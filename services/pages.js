@@ -2,8 +2,8 @@ import 'isomorphic-fetch';
 import { replaceParams } from '../helpers/apiURL';
 import { apiURL } from '../config';
 
-function getPagesByDate(checkIn, checkOut) {
-    const url = replaceParams(apiURL.getPagesByDate, [checkIn, checkOut]);
+function getPagesByDate(checkIn, checkOut, projectToken) {
+    const url = replaceParams(apiURL.getPagesByDate, [checkIn, checkOut, projectToken]);
 
     return fetch(url, {
         credentials: 'include',

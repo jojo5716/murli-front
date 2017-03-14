@@ -30,7 +30,7 @@ export function devicePercentTraffic(pages, visits) {
     return data;
 }
 
-export function getAllDevices(pages) {
+export function getAllDevices(pages = []) {
     const devices = {};
 
     for (let i = 0; i < pages.length; i += 1) {

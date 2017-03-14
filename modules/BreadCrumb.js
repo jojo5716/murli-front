@@ -24,13 +24,18 @@ import { getPagesByDate } from '../services/pages';
 class BreadCrumb extends React.Component {
 
     getPagesFromFetch() {
-        const checkIn = getDateFormat(this.props.checkIn, hourMightnight);
-        const checkOut = getDateFormat(this.props.checkOut, hourEndDay);
+        const checkIn = this.props.checkIn;
+        const checkOut = this.props.checkOut;
+        const projectSelected = this.props.projectSelected;
+        console.log(`PROJECT SELECTED: ${projectSelected}`);
 
-        getPagesByDate(checkIn, checkOut).then(navigationPages => {
-            this.props.dispatch(changePages(navigationPages.navigationPages));
-            this.props.dispatch(loadingPage(false));
-        });
+        if (this.props.projectSelected) {
+            getPagesByDate(checkIn, checkOut, projectSelected).then(navigationPages => {
+                this.props.dispatch(changePages(navigationPages.navigationPages));
+            }).then(() => {
+                this.props.dispatch(loadingPage(false));
+            });
+        }
     }
 
     onChangeCheckIn(value) {
@@ -51,10 +56,9 @@ class BreadCrumb extends React.Component {
     }
 
     onChangeProject(event) {
+        this.props.dispatch(loadingPage(true));
         this.props.dispatch(changeProject(event.target.value));
-        if (Object.keys(this.props.pages).length === 0) {
-            this.getPagesFromFetch();
-        }
+        this.getPagesFromFetch();
     }
 
     renderProjectsList() {
@@ -77,8 +81,6 @@ class BreadCrumb extends React.Component {
     render() {
         const checkIn = `${this.props.checkIn}${hourMightnight}`;
         const checkOut = `${this.props.checkOut}${hourMightnight}`;
-        console.log(`PROJECT SELECTED: ${this.props.projectSelected}`);
-        console.log(this.props.projects);
 
         return (
             <div className="rs-dashhead m-b-lg">
