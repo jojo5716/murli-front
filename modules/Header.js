@@ -39,7 +39,7 @@ export default class App extends React.Component {
                                 <li className="rs-user-nav dropdown">
                                     <a href="javascript:void(0);" className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span className="circle-notification badge-notification bg-success"/>
-                                        <img src="../images/avatars/01.png" className="rs-nav-avatar img-circle" alt="Avatar"/>
+                                        <img src="http://gentolab.com/demo/roosa/latest/images/avatars/01.png" className="rs-nav-avatar img-circle" alt="Avatar"/>
                                             <span className="visible-xs-inline-block m-l">
                                                 Welcome,
                                                 <strong>USER</strong>
