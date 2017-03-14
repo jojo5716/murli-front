@@ -23,14 +23,9 @@ import { getPagesByDate } from '../services/pages';
 
 class BreadCrumb extends React.Component {
 
-    getPagesFromFetch() {
-        const checkIn = this.props.checkIn;
-        const checkOut = this.props.checkOut;
-        const projectSelected = this.props.projectSelected;
-        console.log(`PROJECT SELECTED: ${projectSelected}`);
-
-        if (this.props.projectSelected) {
-            getPagesByDate(checkIn, checkOut, projectSelected).then(navigationPages => {
+    getPagesFromFetch(project, checkIn, checkOut) {
+        if (project) {
+            getPagesByDate(checkIn, checkOut, project).then(navigationPages => {
                 this.props.dispatch(changePages(navigationPages.navigationPages));
             }).then(() => {
                 this.props.dispatch(loadingPage(false));
@@ -41,24 +36,37 @@ class BreadCrumb extends React.Component {
     onChangeCheckIn(value) {
         this.props.dispatch(loadingPage(true));
 
-        const date = moment(value).format(dateFormat);
-        this.props.dispatch(changeCheckIn(date));
-        this.getPagesFromFetch();
+        const checkIn = moment(value).format(dateFormat);
+        const checkOut = this.props.checkOut;
+        const project = this.props.projectSelected;
+
+        this.props.dispatch(changeCheckIn(checkIn));
+
+        this.getPagesFromFetch(checkIn, checkOut, project);
 
     }
 
     onChangeCheckOut(value) {
         this.props.dispatch(loadingPage(true));
 
-        const date = moment(value).format(dateFormat);
-        this.props.dispatch(changeCheckOut(date));
-        this.getPagesFromFetch();
+        const checkOut = moment(value).format(dateFormat);
+        const checkIn = this.props.checkIn;
+        const project = this.props.projectSelected;
+
+        this.props.dispatch(changeCheckOut(checkOut));
+
+        this.getPagesFromFetch(checkIn, checkOut, project);
     }
 
     onChangeProject(event) {
+        const checkIn = this.props.checkIn;
+        const checkOut = this.props.checkOut;
+        const project = event.target.value;
+
         this.props.dispatch(loadingPage(true));
-        this.props.dispatch(changeProject(event.target.value));
-        this.getPagesFromFetch();
+        this.props.dispatch(changeProject(project));
+
+        this.getPagesFromFetch(checkIn, checkOut, project);
     }
 
     renderProjectsList() {
@@ -79,6 +87,7 @@ class BreadCrumb extends React.Component {
     }
 
     render() {
+
         const checkIn = `${this.props.checkIn}${hourMightnight}`;
         const checkOut = `${this.props.checkOut}${hourMightnight}`;
 

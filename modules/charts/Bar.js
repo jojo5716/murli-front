@@ -10,8 +10,6 @@ export default class PieComponent extends React.Component {
             return this.props.data[key];
         });
 
-        console.log(dataValues);
-
         const data = {
             labels: Object.keys(this.props.data),
             datasets: [{
