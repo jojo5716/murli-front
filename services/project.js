@@ -2,7 +2,6 @@ import 'isomorphic-fetch';
 import { apiURL } from '../config';
 
 function getProjects() {
-
     return fetch(apiURL.getProjects, {
         credentials: 'include',
         method: 'GET',

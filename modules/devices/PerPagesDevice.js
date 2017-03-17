@@ -151,7 +151,8 @@ class PerPagesDevice extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		checkIn: reducers(state).dateCheckIn.date,
+		checkIn: reducers(state).changeDates.checkIn,
+		checkOut: reducers(state).changeDates.checkOut,
 		pages: reducers(state).getPages.pages
 	};
 };

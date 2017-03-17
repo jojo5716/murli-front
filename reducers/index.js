@@ -1,14 +1,13 @@
 import { combineReducers } from 'redux';
 
-import { dateCheckIn, dateCheckOut } from './dates';
+import { getDates } from './dates';
 import { getPages } from './pages';
-import { loadProjects } from './project';
+import { getProjects } from './project';
 
 const rootReducer = combineReducers({
-    dateCheckIn,
-    dateCheckOut,
+    getDates,
     getPages,
-    loadProjects
+    getProjects
 });
 
 export default rootReducer;

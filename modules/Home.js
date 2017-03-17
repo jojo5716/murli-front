@@ -14,8 +14,7 @@ class Home extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        checkIn: reducers(state).dateCheckIn.date,
-        pages: reducers(state).getPages.pages
+        pages: reducers(state).getPages
     };
 };
 

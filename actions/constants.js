@@ -1,8 +1,9 @@
 export const actions = {
     loadingPage: 'LOADINGPAGE',
-    changeCheckIn: 'CHANGECHECKIN',
-    changeCheckOut: 'CHANGECHECKOUT',
-    changePages: 'CHANGEPAGES',
-    loadProjects: 'LOADPROJECT',
-    changeProject: 'CHANGEPROJECT'
+    CHANGE_CHECKING: 'CHANGE_CHECKING',
+    CHANGE_CHECKOUT: 'CHANGE_CHECKOUT',
+    CHANGE_PAGES: 'CHANGE_PAGES',
+    REQUEST_PROJECTS: 'REQUEST_PROJECTS',
+    RECEIVE_PROJECTS: 'RECEIVE_PROJECTS',
+    CHANGE_PROJECT: 'CHANGEPROJECT'
 };

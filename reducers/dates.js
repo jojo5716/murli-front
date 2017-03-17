@@ -2,28 +2,21 @@ import moment from 'moment';
 import { dateFormat } from '../config';
 
 import { actions } from '../actions/constants';
-import { getDateFormat } from '../helpers/dates';
-
-const today = moment();
-const oneMonthAgo = moment(today).subtract(1, 'months');
-
-const initialStateCheckIn = { date: oneMonthAgo.format(dateFormat) };
-const initialStateCheckOut = { date: today.format(dateFormat) };
+import initialState from './initialState';
 
 
-export function dateCheckIn(state = initialStateCheckIn, action = {}) {
+export function getDates(state = initialState.dates, action = {}) {
     switch (action.type) {
-        case actions.changeCheckIn:
-            return { date: action.payload.date };
-        default:
-            return state;
-    }
-}
+        case actions.CHANGE_CHECKING:
+            return Object.assign({}, state, {
+                checkIn: action.payload.date
+            });
 
-export function dateCheckOut(state = initialStateCheckOut, action = {}) {
-    switch (action.type) {
-        case actions.changeCheckOut:
-            return { date: action.payload.date };
+        case actions.CHANGE_CHECKOUT:
+            return Object.assign({}, state, {
+                checkOut: action.payload.date
+            });
+
         default:
             return state;
     }

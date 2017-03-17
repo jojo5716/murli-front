@@ -11,7 +11,7 @@ export default class App extends React.Component {
                         <div className="rs-logo fixed-width">
                             <a className="navbar-brand" href="index.html">
                                 <img
-                                    alt="Brand"
+                                    alt="Roiback"
                                     src="https://bookcore.backhotelengine.com/crs/static/imgs/logo_pre.png"
                                 />
                             </a>

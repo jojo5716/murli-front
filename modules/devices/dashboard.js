@@ -111,16 +111,16 @@ class DashboardDevice extends React.Component {
     }
 
     render() {
-        const pages = this.props.pages;
+        const pages = this.props.pages || [];
         const pieData = getAllDevices(pages);
         console.log(pieData);
 
         const visits = getVisitFromPages(pieData);
         const osNames = getOSNameFromPages(pieData);
         const deviceNames = Object.keys(pieData);
-
         const pieDataPercent = devicePercentTraffic(pieData, visits);
-        const colors = generateColorsToPie(pages.length);
+
+        const colors = generateColorsToPie(Object.keys(pages).length);
         const percentTableBrowsers = this.generateBrowserTable(pieDataPercent);
         const percentTableOSs = this.generateOSTable(pieData);
         const bookingTableOSs = this.generateBookingTable(pieData);
@@ -219,7 +219,8 @@ class DashboardDevice extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        checkIn: reducers(state).dateCheckIn.date,
+        checkIn: reducers(state).changeDates.checkIn,
+        checkOut: reducers(state).changeDates.checkOut,
         pages: reducers(state).getPages.pages
     };
 };

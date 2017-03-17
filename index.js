@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
+import createLogger from 'redux-logger'
 
 // Components
 import App from './modules/App';
@@ -14,7 +15,16 @@ import PerPagesDevice from './modules/devices/PerPagesDevice';
 
 import reducers from './reducers';
 
-const store = createStore(reducers, applyMiddleware(thunk));
+const middleware = [thunk];
+
+if (process.env.NODE_ENV !== 'production') {
+    middleware.push(createLogger());
+}
+
+const store = createStore(
+    reducers,
+    applyMiddleware(...middleware)
+);
 
 render((
     <Provider store={store}>

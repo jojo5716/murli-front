@@ -1,75 +1,49 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import DatePicker from 'react-bootstrap-date-picker';
-import 'react-dates/lib/css/_datepicker.css';
 import moment from 'moment';
 
+import DatePicker from 'react-bootstrap-date-picker';
+import 'react-dates/lib/css/_datepicker.css';
+
 import reducers from '../reducers/';
-import { getDateFormat } from '../helpers/dates';
 
 import {
     changeCheckIn,
     changeCheckOut,
-    changePages,
-    loadProjects,
-    changeProject,
-    loadingPage
+    changeProjectSelected,
+    fetchAllProjectsIfNeeded,
+    fetchPagesIfNeeded
 } from '../actions/';
 
 import { hourMightnight, dateFormat, hourEndDay } from '../config';
-// Services
-import { getPagesByDate } from '../services/pages';
 
 
 class BreadCrumb extends React.Component {
 
-    getPagesFromFetch(project, checkIn, checkOut) {
-        if (project) {
-            getPagesByDate(checkIn, checkOut, project).then(navigationPages => {
-                this.props.dispatch(changePages(navigationPages.navigationPages));
-            }).then(() => {
-                this.props.dispatch(loadingPage(false));
-            });
-        }
+    componentDidMount() {
+        this.props.dispatch(fetchAllProjectsIfNeeded());
     }
 
     onChangeCheckIn(value) {
-        this.props.dispatch(loadingPage(true));
-
-        const checkIn = moment(value).format(dateFormat);
-        const checkOut = this.props.checkOut;
-        const project = this.props.projectSelected;
-
-        this.props.dispatch(changeCheckIn(checkIn));
-
-        this.getPagesFromFetch(checkIn, checkOut, project);
-
+        const date = moment(value).format(dateFormat);
+        this.props.dispatch(changeCheckIn(date));
+        this.props.dispatch(fetchPagesIfNeeded());
     }
 
     onChangeCheckOut(value) {
-        this.props.dispatch(loadingPage(true));
-
-        const checkOut = moment(value).format(dateFormat);
-        const checkIn = this.props.checkIn;
-        const project = this.props.projectSelected;
-
-        this.props.dispatch(changeCheckOut(checkOut));
-
-        this.getPagesFromFetch(checkIn, checkOut, project);
+        const date = moment(value).format(dateFormat);
+        this.props.dispatch(changeCheckOut(date));
+        this.props.dispatch(fetchPagesIfNeeded());
     }
 
     onChangeProject(event) {
-        const checkIn = this.props.checkIn;
-        const checkOut = this.props.checkOut;
-        const project = event.target.value;
-
-        this.props.dispatch(loadingPage(true));
-        this.props.dispatch(changeProject(project));
-
-        this.getPagesFromFetch(checkIn, checkOut, project);
+        this.props.dispatch(changeProjectSelected({
+            projectSelected: event.target.value
+        }));
+        this.props.dispatch(fetchPagesIfNeeded());
     }
 
-    renderProjectsList() {
+    renderProjectsOptions() {
         const html = [];
         for (let i = 0; i < this.props.projects.length; i += 1) {
             const project = this.props.projects[i];
@@ -78,18 +52,13 @@ class BreadCrumb extends React.Component {
                 <option value={project._id} key={i}>{project.name}</option>
             );
         }
-        return (
-            <select className="form-control" onChange={this.onChangeProject.bind(this)}>
-                <option disabled="disabled" selected="selected">Select a project</option>
-                {html}
-            </select>
-        );
+
+        return html;
     }
 
     render() {
-
         const checkIn = `${this.props.checkIn}${hourMightnight}`;
-        const checkOut = `${this.props.checkOut}${hourMightnight}`;
+        const checkOut = `${this.props.checkOut}${hourEndDay}`;
 
         return (
             <div className="rs-dashhead m-b-lg">
@@ -100,9 +69,11 @@ class BreadCrumb extends React.Component {
                         </h6>
                         <h3 className="rs-dashhead-title m-t">
                             <div className="col-md-6">
-                                {this.renderProjectsList()}
+                                <select className="form-control" onChange={this.onChangeProject.bind(this)}>
+                                    <option disabled="disabled" selected="selected">Select a project</option>
+                                    {this.renderProjectsOptions()}
+                                </select>
                             </div>
-
                         </h3>
                         <div className="toggle-toolbar-btn">
                             <span className="fa fa-sort"/>
@@ -159,11 +130,11 @@ class BreadCrumb extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        checkIn: reducers(state).dateCheckIn.date,
-        checkOut: reducers(state).dateCheckOut.date,
+        checkIn: reducers(state).getDates.checkIn,
+        checkOut: reducers(state).getDates.checkOut,
         pages: reducers(state).getPages.pages,
-        projects: reducers(state).loadProjects.projects,
-        projectSelected: reducers(state).loadProjects.projectSelected
+        projects: reducers(state).getProjects.projects,
+        projectSelected: reducers(state).getProjects.projectSelected
     };
 };
 

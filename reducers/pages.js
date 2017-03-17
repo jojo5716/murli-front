@@ -1,16 +1,12 @@
 import { actions } from '../actions/constants';
+import initialState from './initialState';
 
-const initialPages = { pages: [], loading: true };
-
-export function getPages(state = initialPages, action = {}) {
+export function getPages(state = initialState.navigationPages, action = {}) {
     switch (action.type) {
-        case actions.changePages:
-            return { pages: action.payload.pages };
-        case actions.loadingPage:
-            return {
-                loading: action.payload.loading,
-                pages: state.pages
-            };
+        case actions.CHANGE_PAGES:
+            return Object.assign({}, state, {
+                navigationPages: action.payload.navigationPages
+            });
         default:
             return state;
     }

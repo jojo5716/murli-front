@@ -9,29 +9,9 @@ import BreadCrumb from './BreadCrumb';
 import Footer from './Footer';
 
 import reducers from '../reducers/';
-import { getDateFormat } from '../helpers/dates';
-import {
-    changeCheckIn,
-    changeCheckOut,
-    changePages,
-    loadProjects,
-    loadingPage
-} from '../actions/';
-import { hourMightnight, hourEndDay, dateFormat } from '../config';
-
-// Services
-import { getPagesByDate } from '../services/pages';
-import { getProjects } from '../services/project';
 
 
 class App extends React.Component {
-
-    componentDidMount() {
-        getProjects().then(projects => {
-            this.props.dispatch(loadProjects(projects.projects));
-            this.props.dispatch(loadingPage(false));
-        });
-    }
 
     renderLoading() {
         return (
@@ -39,9 +19,7 @@ class App extends React.Component {
                 <div className="col-md-12 loadingContent">
                     <Spinner spinnerName="three-bounce"/>
                 </div>
-
             </div>
-
         );
     }
 
@@ -76,7 +54,7 @@ class App extends React.Component {
                     <div className="rs-content">
                         <div className="rs-inner">
                             <BreadCrumb />
-                            { this.props.loading ? this.renderLoading() : this.renderPage() }
+                            { this.props.isFetching ? this.renderLoading() : this.renderPage() }
                         </div>
                     </div>
                 </article>
@@ -86,15 +64,16 @@ class App extends React.Component {
     }
 }
 
-//
+
 const mapStateToProps = (state) => {
     return {
-        checkIn: reducers(state).dateCheckIn.date,
-        checkOut: reducers(state).dateCheckOut.date,
-        pages: reducers(state).getPages.pages,
+        checkIn: reducers(state).getDates.checkIn,
+        checkOut: reducers(state).getDates.checkOut,
+        pages: reducers(state).getPages,
         loading: reducers(state).getPages.loading,
-        projects: reducers(state).loadProjects.projects,
-        projectSelected: reducers(state).loadProjects.projectSelected
+        projects: reducers(state).getProjects.projects,
+        projectSelected: reducers(state).getProjects.projectSelected,
+        isFetching: reducers(state).getProjects.isFetching,
     };
 };
 
