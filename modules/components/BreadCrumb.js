@@ -5,7 +5,7 @@ import moment from 'moment';
 import DatePicker from 'react-bootstrap-date-picker';
 import 'react-dates/lib/css/_datepicker.css';
 
-import reducers from '../reducers/';
+import reducers from '../../reducers/';
 
 import {
     changeCheckIn,
@@ -13,9 +13,9 @@ import {
     changeProjectSelected,
     fetchAllProjectsIfNeeded,
     fetchPagesIfNeeded
-} from '../actions/';
+} from '../../actions/';
 
-import { hourMightnight, dateFormat, hourEndDay } from '../config';
+import { hourMightnight, dateFormat, hourEndDay } from '../../config';
 
 
 class BreadCrumb extends React.Component {

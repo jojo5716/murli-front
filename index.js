@@ -7,11 +7,11 @@ import { createStore, applyMiddleware } from 'redux';
 import createLogger from 'redux-logger'
 
 // Components
-import App from './modules/App';
-import Home from './modules/Home';
-import About from './modules/About';
-import DashboardDevice from './modules/devices/dashboard';
-import PerPagesDevice from './modules/devices/PerPagesDevice';
+import App from './modules/index';
+import Home from './modules/containers/Home';
+import About from './modules/containers/About';
+import DashboardDevice from './modules/containers/devices/dashboard';
+import PerPagesDevice from './modules/containers/devices/PerPagesDevice';
 
 import reducers from './reducers';
 

@@ -1,15 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Spinner from 'react-spinkit';
+import { AsyncComponentProvider } from 'react-async-component';
 
 // Components
-import Menu from './Menu';
-import Header from './Header';
-import BreadCrumb from './BreadCrumb';
-import Footer from './Footer';
+import Menu from './components/Menu';
+import Header from './components/Header';
+import BreadCrumb from './components/BreadCrumb';
+import Footer from './components/Footer';
 
 import reducers from '../reducers/';
-
+import { loadedComponents } from '../actions'
 
 class App extends React.Component {
 
@@ -38,14 +39,18 @@ class App extends React.Component {
         );
     }
 
-    renderPage() {
+    renderChildren() {
         if (this.props.projectSelected) {
             return this.props.children;
         }
         return this.renderProjectNotFound();
     }
 
-    render() {
+    componentDidMount() {
+        this.props.dispatch(loadedComponents());
+    }
+
+    renderPage() {
         return (
             <div>
                 <Header/>
@@ -54,12 +59,22 @@ class App extends React.Component {
                     <div className="rs-content">
                         <div className="rs-inner">
                             <BreadCrumb />
-                            { this.props.isFetching ? this.renderLoading() : this.renderPage() }
+                            { this.renderChildren() }
                         </div>
                     </div>
                 </article>
                 <Footer/>
             </div>
+        );
+    }
+
+    render() {
+        console.log(`loading components: ${this.props.loadingComponents}`);
+
+        return (
+            <AsyncComponentProvider>
+                { this.props.loadingComponents ? this.renderLoading() : this.renderPage() }
+            </AsyncComponentProvider>
         );
     }
 }
@@ -74,6 +89,7 @@ const mapStateToProps = (state) => {
         projects: reducers(state).getProjects.projects,
         projectSelected: reducers(state).getProjects.projectSelected,
         isFetching: reducers(state).getProjects.isFetching,
+        loadingComponents: reducers(state).components.loading
     };
 };
 

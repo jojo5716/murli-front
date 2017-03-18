@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import reducers from '../../reducers/';
-import BoxChart from '../dummies/BoxChart';
+import reducers from '../../../reducers/';
+import BoxChart from '../../components/BoxChart';
 
-import { groupBySections } from '../../helpers/pages';
+import { groupBySections } from '../../../helpers/pages';
 
 class PerPagesDevice extends React.Component {
 

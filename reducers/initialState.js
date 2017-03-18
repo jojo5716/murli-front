@@ -10,6 +10,9 @@ export default {
         checkIn: oneMonthAgo.format(dateFormat),
         checkOut: today.format(dateFormat)
     },
+    components: {
+        loading: true
+    },
     projects: [],
     projectSelected: null,
     navigationPages: []

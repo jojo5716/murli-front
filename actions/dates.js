@@ -1,8 +1,6 @@
 import 'isomorphic-fetch';
 
 import { actions } from './constants';
-import { replaceParams } from '../helpers/apiURL';
-import { apiURL } from '../config';
 
 function changeCheckIn(date) {
     return {

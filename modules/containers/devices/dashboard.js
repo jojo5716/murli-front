@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import reducers from '../../reducers/';
+import reducers from '../../../reducers/';
 
 import {
     generateColorsToPie,
@@ -8,11 +8,11 @@ import {
     getAllDevices,
     getVisitFromPages,
     getOSNameFromPages
-} from '../../helpers/devices';
+} from '../../../helpers/devices';
 
-// Charts components
-import Pie from '../charts/Pie';
-import Bar from '../charts/Bar';
+// Charts modules
+import Pie from '../../components/charts/Pie';
+import Bar from '../../components/charts/Bar';
 
 class DashboardDevice extends React.Component {
 
@@ -41,7 +41,9 @@ class DashboardDevice extends React.Component {
             return (
                 <div className="panel panel-plain" key={index}>
 					<div className="panel-heading">
-						<h3 className="panel-title">{browserName}</h3>
+						<h3 className="panel-title">
+                            {browserName}
+                            </h3>
 						<div className="panel-toolbar v-centered" >
 							<span className="fa fa-twitter text-info"/>
 						</div>
@@ -111,7 +113,7 @@ class DashboardDevice extends React.Component {
     }
 
     render() {
-        const pages = this.props.pages || [];
+        const pages = this.props.navigationPages ? this.props.navigationPages.pages : [];
         const pieData = getAllDevices(pages);
         console.log(pieData);
 
@@ -219,9 +221,9 @@ class DashboardDevice extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        checkIn: reducers(state).changeDates.checkIn,
-        checkOut: reducers(state).changeDates.checkOut,
-        pages: reducers(state).getPages.pages
+        checkIn: reducers(state).getDates.checkIn,
+        checkOut: reducers(state).getDates.checkOut,
+        navigationPages: reducers(state).getPages.navigationPages
     };
 };
 
