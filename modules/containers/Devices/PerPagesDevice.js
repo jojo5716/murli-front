@@ -27,7 +27,9 @@ class PerPagesDevice extends React.Component {
 	}
 
     render() {
-		const pages = groupBySections(this.props.pages);
+		const pages = groupBySections(this.props.navigationPages  || []);
+		console.log(pages);
+
 		const totalAvailability = pages.availabilityDestination.total + pages.availability.total;
 		const totalPagesVisited = totalAvailability + pages.content.total + pages.noAvailability.total;
 
@@ -46,9 +48,10 @@ class PerPagesDevice extends React.Component {
 		const availabilityPages = Object.keys(pages.availability.urls).length;
 		const nonAvailabilityPages = Object.keys(pages.noAvailability.urls).length;
 
+
         return (
             <div className="container-fluid">
-                <div className="row">
+				 <div className="row">
                     <div className="col-lg-12">
                         <div className="col-md-3">
                             <BoxChart
@@ -143,7 +146,7 @@ class PerPagesDevice extends React.Component {
         					</div>
         				</div>
                     </div>
-                </div>
+                </div> 
             </div>
         );
     }
@@ -151,9 +154,9 @@ class PerPagesDevice extends React.Component {
 
 const mapStateToProps = (state) => {
 	return {
-		checkIn: reducers(state).changeDates.checkIn,
-		checkOut: reducers(state).changeDates.checkOut,
-		pages: reducers(state).getPages.pages
+		checkIn: reducers(state).getDates.checkIn,
+		checkOut: reducers(state).getDates.checkOut,
+        navigationPages: reducers(state).getPages.navigationPages
 	};
 };
 
