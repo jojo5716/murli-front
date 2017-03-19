@@ -5,7 +5,7 @@ import reducers from '../../../reducers/';
 import {
     generateColorsToPie,
     devicePercentTraffic,
-    getAllDevices,
+    groupPagesByDevices,
     getVisitFromPages,
     getOSNameFromPages
 } from '../../../helpers/devices';
@@ -94,6 +94,7 @@ class DashboardDevice extends React.Component {
                         <ul className="list-group m-b-0">
     						{Object.keys(osData.names).map((osName, index) => {
                                 const bookings = osData.names[osName].bookings;
+
                                 return bookings.length > 0 ?
                                     (
                                         <li className="list-group-item" key={index}>
@@ -112,53 +113,42 @@ class DashboardDevice extends React.Component {
         })
     }
 
+
     render() {
-        const pages = this.props.navigationPages ? this.props.navigationPages.pages : [];
-        const pieData = getAllDevices(pages);
-        console.log(pieData);
+        const pages = this.props.navigationPages || [];
+        const devicesData = groupPagesByDevices(pages);
 
-        const visits = getVisitFromPages(pieData);
-        const osNames = getOSNameFromPages(pieData);
-        const deviceNames = Object.keys(pieData);
-        const pieDataPercent = devicePercentTraffic(pieData, visits);
+        // Devices browsers
+        const deviceNames = Object.keys(devicesData);
+        const colors = generateColorsToPie(Object.keys(devicesData).length);
+        const visits = getVisitFromPages(devicesData);
 
-        const colors = generateColorsToPie(Object.keys(pages).length);
+         // Top OS names
+        const osVisits = getOSNameFromPages(devicesData);
+
+        const pieDataPercent = devicePercentTraffic(devicesData, visits);
         const percentTableBrowsers = this.generateBrowserTable(pieDataPercent);
-        const percentTableOSs = this.generateOSTable(pieData);
-        const bookingTableOSs = this.generateBookingTable(pieData);
+        const percentTableOSs = this.generateOSTable(devicesData);
+        const bookingTableOSs = this.generateBookingTable(devicesData);
+
 
         return (
             <div className="container-fluid">
                 <div className="row">
                     <div className='col-md-6'>
-                        <div className="stacked-item panel panel-plain">
-                            <div className="panel-heading borderless">
-                                <h3 className="panel-title">Device by Type</h3>
-                                <div className="panel-toolbar v-centered" >
-                                    <p className="subtitle text-uppercase m-a-0">All pages</p>
-                                </div>
-                            </div>
-                            <div className="panel-body">
-                                <Pie
-                                devices={deviceNames}
-                                visits={visits}
-                                colors={colors}/>
-                            </div>
-                        </div>
+                        <Pie
+                            title="% Visits vy device type"
+                            subtitle="All pages"
+                            devices={deviceNames}
+                            visits={visits}
+                            colors={colors}/>
                     </div>
 
                     <div className='col-md-6'>
-                            <div className="stacked-item panel panel-plain">
-                                <div className="panel-heading borderless">
-                                    <h3 className="panel-title">Top browser devices</h3>
-                                    <div className="panel-toolbar v-centered" >
-                                        <p className="subtitle text-uppercase m-a-0">All pages</p>
-                                    </div>
-                                </div>
-                                <div className="panel-body">
-                                    <Bar data={osNames}/>
-                                </div>
-                            </div>
+                        <Bar
+                            title="% Top Os"
+                            subtitle="All pages"
+                            data={osVisits} />
                     </div>
                 </div>
 
@@ -166,7 +156,7 @@ class DashboardDevice extends React.Component {
                     <div className="col-md-6">
                         <div className="stacked-item panel panel-plain">
                             <div className="panel-heading borderless">
-                                <h3 className="panel-title">% Visits by browser</h3>
+                                <h3 className="panel-title">Detail top browser visits</h3>
                                 <div className="panel-toolbar v-centered" >
                                     <p className="subtitle text-uppercase m-a-0">All pages</p>
                                 </div>
@@ -174,20 +164,20 @@ class DashboardDevice extends React.Component {
                             <div className="panel-body">
                                 <table className="table rs-table table-striped table-hover table-b-t">
                                     <thead>
-                                        <tr>
-                                            <th>Browser name</th>
-                                            <th># Devices</th>
-                                            <th>%</th>
-                                        </tr>
+                                    <tr>
+                                        <th>Browser name</th>
+                                        <th># Devices</th>
+                                        <th>%</th>
+                                    </tr>
                                     </thead>
                                     <tbody>
-                                        { percentTableBrowsers }
+                                    { percentTableBrowsers }
                                     </tbody>
                                 </table>
                             </div>
                         </div>
 
-                        <div className="stacked-item panel panel-plain">
+                         <div className="stacked-item panel panel-plain">
                             <div className="panel-heading borderless">
                                 <h3 className="panel-title">Bookings by device os</h3>
                                 <div className="panel-toolbar v-centered" >
@@ -221,8 +211,6 @@ class DashboardDevice extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        checkIn: reducers(state).getDates.checkIn,
-        checkOut: reducers(state).getDates.checkOut,
         navigationPages: reducers(state).getPages.navigationPages
     };
 };

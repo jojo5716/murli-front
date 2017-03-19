@@ -30,46 +30,49 @@ export function devicePercentTraffic(pages, visits) {
     return data;
 }
 
-export function getAllDevices(pages = []) {
+export function groupPagesByDevices(navigationPages = []) {
     const devices = {};
 
-    for (let i = 0; i < pages.length; i += 1) {
-        const user = pages[i].user || {};
-        const userAgentData = parser(user.dataUser.userAgent);
+    for (let navigationIndex = 0; navigationIndex < navigationPages.length; navigationIndex += 1) {
+        const navigationPage = navigationPages[navigationIndex];
+        const pages = navigationPage.pages;
+        const user = navigationPage.user;
 
-        const deviceBrowserName = userAgentData.browser.name || 'Unknown';
-        const deviceBrowserVersion = userAgentData.browser.version || '0.0.0';
-        const deviceOSName = userAgentData.os.name;
-        const deviceOSVersion = userAgentData.os.version;
+        for (let i = 0; i < pages.length; i += 1) {
+            const userAgentData = parser(user.dataUser.userAgent);
+            const deviceBrowserName = userAgentData.browser.name || 'Unknown';
+            const deviceOSName = userAgentData.os.name || 'Unknown';
+            const deviceOSVersion = userAgentData.os.version || 'Unknown';
 
-        if (!devices[deviceBrowserName]) {
-            devices[deviceBrowserName] = {
-                browser: {
-                    visits: 0
-                },
-                os: {
-                    names: {}
-                }
-            };
+            if (!devices[deviceBrowserName]) {
+                devices[deviceBrowserName] = {
+                    browser: {
+                        visits: 0
+                    },
+                    os: {
+                        names: {}
+                    }
+                };
+            }
+
+            if (!devices[deviceBrowserName].os.names[deviceOSName]) {
+                devices[deviceBrowserName].os.names[deviceOSName] = {
+                    versions: new Set(),
+                    visits: 0,
+                    bookings: []
+                };
+            }
+
+            devices[deviceBrowserName].browser.visits += 1;
+            devices[deviceBrowserName].os.names[deviceOSName].visits += 1;
+            devices[deviceBrowserName].os.names[deviceOSName].versions.add(deviceOSVersion);
+
+            if (user.bookings.length > 0) {
+                devices[deviceBrowserName].os.names[deviceOSName].bookings.push(user.bookings);
+            }
         }
-
-        if(!devices[deviceBrowserName].os.names[deviceOSName]) {
-            devices[deviceBrowserName].os.names[deviceOSName] = {
-                versions: new Set(),
-                visits: 0,
-                bookings: []
-            };
-        }
-
-        devices[deviceBrowserName].browser.visits += 1;
-        devices[deviceBrowserName].os.names[deviceOSName].visits += 1;
-        devices[deviceBrowserName].os.names[deviceOSName].versions.add(deviceOSVersion);
-
-        if (user.bookings.length > 0) {
-            devices[deviceBrowserName].os.names[deviceOSName].bookings.push(user.bookings);
-        }
-
     }
+
     return devices;
 }
 

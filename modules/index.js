@@ -46,34 +46,22 @@ class App extends React.Component {
         return this.renderProjectNotFound();
     }
 
-    componentDidMount() {
-        this.props.dispatch(loadedComponents());
-    }
-
-    renderPage() {
-        return (
-            <div>
-                <Header/>
-                <Menu/>
-                <article className="rs-content-wrapper">
-                    <div className="rs-content">
-                        <div className="rs-inner">
-                            <BreadCrumb />
-                            { this.renderChildren() }
-                        </div>
-                    </div>
-                </article>
-                <Footer/>
-            </div>
-        );
-    }
-
     render() {
-        console.log(`loading components: ${this.props.loadingComponents}`);
-
         return (
             <AsyncComponentProvider>
-                { this.props.loadingComponents ? this.renderLoading() : this.renderPage() }
+                <div>
+                    <Header/>
+                    <Menu/>
+                    <article className="rs-content-wrapper">
+                        <div className="rs-content">
+                            <div className="rs-inner">
+                                <BreadCrumb />
+                                { this.props.loadingComponents ? this.renderLoading() : this.renderChildren() }
+                            </div>
+                        </div>
+                    </article>
+                    <Footer/>
+                </div>
             </AsyncComponentProvider>
         );
     }

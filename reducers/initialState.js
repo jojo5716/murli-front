@@ -11,7 +11,7 @@ export default {
         checkOut: today.format(dateFormat)
     },
     components: {
-        loading: true
+        loading: false
     },
     projects: [],
     projectSelected: null,

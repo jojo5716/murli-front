@@ -16,7 +16,18 @@ export default class PieComponent extends React.Component {
         };
 
         return (
-            <Doughnut data={data} />
+        <div className="stacked-item panel panel-plain">
+            <div className="panel-heading borderless">
+                <h3 className="panel-title">{this.props.title}</h3>
+                <div className="panel-toolbar v-centered" >
+                    <p className="subtitle text-uppercase m-a-0">{this.props.subtitle}</p>
+                </div>
+            </div>
+            <div className="panel-body">
+                <Doughnut data={data} />
+            </div>
+        </div>
+
         );
     }
 }
