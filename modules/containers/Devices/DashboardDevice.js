@@ -129,8 +129,6 @@ class DashboardDevice extends React.Component {
         const pieDataPercent = devicePercentTraffic(devicesData, visits);
         const percentTableBrowsers = this.generateBrowserTable(pieDataPercent);
         const percentTableOSs = this.generateOSTable(devicesData);
-        const bookingTableOSs = this.generateBookingTable(devicesData);
-
 
         return (
             <div className="container-fluid">
@@ -174,18 +172,6 @@ class DashboardDevice extends React.Component {
                                     { percentTableBrowsers }
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-
-                         <div className="stacked-item panel panel-plain">
-                            <div className="panel-heading borderless">
-                                <h3 className="panel-title">Bookings by device os</h3>
-                                <div className="panel-toolbar v-centered" >
-                                    <p className="subtitle text-uppercase m-a-0">All pages</p>
-                                </div>
-                            </div>
-                            <div className="panel-body">
-                                { bookingTableOSs }
                             </div>
                         </div>
 

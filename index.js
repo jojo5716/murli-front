@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import createLogger from 'redux-logger'
+import createLogger from 'redux-logger';
 
 // Components
 import App from './modules/index';
@@ -17,7 +17,7 @@ import reducers from './reducers';
 
 const middleware = [thunk];
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'debugger') {
     middleware.push(createLogger());
 }
 

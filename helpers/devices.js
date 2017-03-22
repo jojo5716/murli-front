@@ -12,6 +12,10 @@ export function generateColorsToPie(length) {
     return colors;
 }
 
+export function getUserAgentInfo(userAgent) {
+    return  parser(userAgent);
+}
+
 export function devicePercentTraffic(pages, visits) {
     const data = [];
     const total = visits.reduce((a, b) =>  a + b, 0);
@@ -39,7 +43,7 @@ export function groupPagesByDevices(navigationPages = []) {
         const user = navigationPage.user;
 
         for (let i = 0; i < pages.length; i += 1) {
-            const userAgentData = parser(user.dataUser.userAgent);
+            const userAgentData = getUserAgentInfo(user.dataUser.userAgent);
             const deviceBrowserName = userAgentData.browser.name || 'Unknown';
             const deviceOSName = userAgentData.os.name || 'Unknown';
             const deviceOSVersion = userAgentData.os.version || 'Unknown';

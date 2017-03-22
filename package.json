@@ -6,7 +6,9 @@
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
     "start:dev": "webpack-dev-server --inline --content-base public/ --history-api-fallback",
-    "start:prod": "webpack && node server.js"
+    "start:debug": "NODE_ENV=debugger  webpack-dev-server --inline --content-base public/ --history-api-fallback",
+    "start:prod": "webpack && node server.js",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -49,14 +51,22 @@
   },
   "devDependencies": {
     "babel-core": "^6.5.1",
+    "babel-eslint": "^7.2.0",
     "babel-loader": "^6.2.2",
     "babel-preset-es2015": "^6.5.0",
     "babel-preset-react": "^6.5.0",
     "css-loader": "^0.27.1",
+    "duplicate-package-checker-webpack-plugin": "^1.2.4",
+    "eslint": "^3.18.0",
+    "eslint-config-airbnb-base": "^11.1.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-react": "^6.10.3",
+    "extract-text-webpack-plugin": "^2.1.0",
     "http-server": "^0.8.5",
     "react-addons-shallow-compare": "^15.4.2",
     "style-loader": "^0.13.2",
     "webpack": "^1.12.13",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
+    "webpack-visualizer-plugin": "^0.1.11"
   }
 }
