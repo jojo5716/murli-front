@@ -1,5 +1,5 @@
 
-export function groupBySections(navigationPages) {
+export function groupBySections(navigationPages, resolve) {
     const pagesData = {
         availability: { urls: {}, total: 0, previousURL: {} },
         availabilityDestination: { urls: {}, total: 0, previousURL: {} },
@@ -14,12 +14,10 @@ export function groupBySections(navigationPages) {
         for (let i = 0; i < pages.length; i += 1) {
             // Each page data
             groupBySection(pages[i], pagesData);
-
+        }
     }
 
-    }
-
-    return pagesData;
+    resolve(pagesData);
 }
 
 function groupBySection(page, pagesData) {

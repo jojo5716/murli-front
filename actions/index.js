@@ -1,6 +1,6 @@
 import { changeCheckIn, changeCheckOut } from './dates';
 import { changeProjectSelected, fetchAllProjectsIfNeeded } from './project';
-import { fetchPagesIfNeeded } from './pages';
+import { fetchPagesIfNeeded, formatDevicesIfNeeded, formatDevicesPagesIfNeeded, loadingDevices } from '../modules/containers/Devices/actions';
 import { loadingComponents, loadedComponents } from './components';
 
 module.exports = {
@@ -12,8 +12,11 @@ module.exports = {
     changeProjectSelected,
     fetchAllProjectsIfNeeded,
 
-    // Pages
+    // Devices
     fetchPagesIfNeeded,
+    formatDevicesIfNeeded,
+    formatDevicesPagesIfNeeded,
+    loadingDevices,
 
     // Components
     loadingComponents,

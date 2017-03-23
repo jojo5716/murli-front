@@ -12,7 +12,8 @@ import {
     changeCheckOut,
     changeProjectSelected,
     fetchAllProjectsIfNeeded,
-    fetchPagesIfNeeded
+    fetchPagesIfNeeded,
+    loadingDevices
 } from '../../actions/';
 
 import { hourMightnight, dateFormat, hourEndDay } from '../../config';
@@ -40,7 +41,6 @@ class BreadCrumb extends React.Component {
         this.props.dispatch(changeProjectSelected({
             projectSelected: event.target.value
         }));
-        this.props.dispatch(fetchPagesIfNeeded());
     }
 
     renderProjectsOptions() {
@@ -49,7 +49,9 @@ class BreadCrumb extends React.Component {
             const project = this.props.projects[i];
 
             html.push(
-                <option value={project._id} key={i}>{project.name}</option>
+                <option value={project._id} key={i}>
+                    {project.name}
+                </option>
             );
         }
 

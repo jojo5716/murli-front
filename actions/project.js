@@ -2,12 +2,38 @@ import 'isomorphic-fetch';
 
 import { actions } from './constants';
 import { apiURL } from '../config';
+import { shouldFetchPages, fetchPagesIfNeeded } from '../modules/containers/Devices/actions';
+
+
+function changeProject(payload) {
+    return {
+        type: actions.CHANGE_PROJECT_SELECTED,
+        payload
+    };
+}
+
+const fetchProjects = () => (dispatch) => {
+    dispatch(requestProjects());
+
+    return fetch(apiURL.getProjects, {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+    })
+        .then(response => response.json())
+        .then(json => dispatch(receiveProjects(json.projects)));
+};
 
 
 function changeProjectSelected(payload) {
-    return {
-        type: actions.CHANGE_PROJECT,
-        payload
+    return (dispatch, getState) => {
+        dispatch(changeProject(payload));
+
+        if (shouldFetchPages(getState())) {
+            return dispatch(fetchPagesIfNeeded());
+        }
     };
 }
 
@@ -24,28 +50,15 @@ function receiveProjects(json) {
     return {
         type: actions.RECEIVE_PROJECTS,
         payload: {
-            projects: json,
-            receivedAt: Date.now()
+            projects: json
         }
     };
 }
 
-const fetchProjects = () => (dispatch) => {
-    dispatch(requestProjects());
-
-    return fetch(apiURL.getProjects, {
-        credentials: 'include',
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
-    })
-    .then(response => response.json())
-    .then(json => dispatch(receiveProjects(json.projects)));
-};
 
 const shouldFetchProjects = (state) => {
     let shouldFetch = false;
+
     if (state.getProjects.projects.length === 0) {
         shouldFetch = true;
     }

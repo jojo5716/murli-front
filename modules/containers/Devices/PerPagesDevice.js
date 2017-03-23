@@ -4,12 +4,28 @@ import reducers from '../../../reducers/';
 import BoxChart from '../../components/BoxChart';
 
 import { groupBySections } from '../../../helpers/pages';
+import { formatDevicesPagesIfNeeded } from '../../../actions/';
 
 class PerPagesDevice extends React.Component {
 
-    render() {
-        const pages = groupBySections(this.props.navigationPages || []);
+    refreshData() {
+        const pages = this.props.navigationPages || [];
+        const loading = this.props.loadingDevicesPages;
 
+        if (pages.length > 0 && loading) {
+            this.props.dispatch(formatDevicesPagesIfNeeded());
+        }
+    }
+
+    componentDidMount() {
+        this.refreshData();
+    }
+
+    componentDidUpdate() {
+        this.refreshData();
+    }
+
+    renderPage(pages) {
         const totalAvailability = pages.availabilityDestination.total + pages.availability.total;
         const totalPagesVisited = totalAvailability + pages.content.total + pages.noAvailability.total;
 
@@ -22,7 +38,7 @@ class PerPagesDevice extends React.Component {
 
         return (
             <div className="container-fluid">
-				<div className="row">
+                <div className="row">
                     <div className="col-lg-12">
                         <div className="col-md-3">
                             <BoxChart
@@ -57,12 +73,28 @@ class PerPagesDevice extends React.Component {
                                 title="% Conversion"
                                 percent={conversionBooking.toFixed(2)}
                                 type="green"
-                                />
+                            />
                         </div>
                     </div>
                 </div>
             </div>
         );
+    }
+
+    render() {
+        const loading = this.props.loadingDevicesPages;
+        const pagesData = this.props.devicesPagesData;
+
+        if (loading) {
+            return <h1>Loading...</h1>;
+        }
+
+        if (pagesData) {
+            return this.renderPage(pagesData);
+        }
+
+        return null;
+
     }
 }
 
@@ -70,7 +102,9 @@ const mapStateToProps = (state) => {
     return {
         checkIn: reducers(state).getDates.checkIn,
         checkOut: reducers(state).getDates.checkOut,
-        navigationPages: reducers(state).getPages.navigationPages
+        navigationPages: reducers(state).getPages.navigationPages,
+        loadingDevicesPages: reducers(state).devices.loadingDevicesPages,
+        devicesPagesData: reducers(state).devices.devicesPagesData
     };
 };
 

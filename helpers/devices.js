@@ -34,7 +34,8 @@ export function devicePercentTraffic(pages, visits) {
     return data;
 }
 
-export function groupPagesByDevices(navigationPages = []) {
+export function groupPagesByDevices(navigationPages = [], resolve) {
+
     const devices = {};
 
     for (let navigationIndex = 0; navigationIndex < navigationPages.length; navigationIndex += 1) {
@@ -77,7 +78,7 @@ export function groupPagesByDevices(navigationPages = []) {
         }
     }
 
-    return devices;
+    resolve(devices);
 }
 
 export function getVisitFromPages(pages) {

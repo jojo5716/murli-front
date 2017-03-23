@@ -11,14 +11,13 @@ export function devices(state = initialState, action = {}) {
     switch (action.type) {
         case actions.LOADING_DEVICES:
             return Object.assign({}, state, {
-                devicesData: [],
-                loadingDevices: true
+                loadingDevices: action.payload.loadingDevices
             });
 
         case actions.LOADED_DEVICES:
+
             return Object.assign({}, state, {
-                devicesData: action.payload.devicesData,
-                loadingDevices: false
+                devicesData: action.payload.devicesData
             });
 
         case actions.LOADING_DEVICES_PAGES:

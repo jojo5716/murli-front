@@ -10,9 +10,11 @@ import {
     getOSNameFromPages
 } from '../../../helpers/devices';
 
+import { formatDevicesIfNeeded } from '../../../actions/';
 // Charts modules
 import Pie from '../../components/charts/Pie';
 import Bar from '../../components/charts/Bar';
+import Loader from '../../components/Loader';
 
 class DashboardDevice extends React.Component {
 
@@ -31,7 +33,7 @@ class DashboardDevice extends React.Component {
                     </td>
                 </tr>
             );
-        })
+        });
     }
 
     generateOSTable(pages) {
@@ -67,63 +69,23 @@ class DashboardDevice extends React.Component {
                                             </span>
                                         </td>
                                     </tr>
-                                )
+                                );
                             })}
                             </tbody>
                         </table>
 					</div>
 				</div>
             );
-        })
+        });
     }
 
-
-    generateBookingTable(pages) {
-        return Object.keys(pages).map((browserName, index) => {
-            const osData = pages[browserName].os;
-
-            return (
-                <div className="panel panel-plain" key={index}>
-					<div className="panel-heading">
-						<h3 className="panel-title">{browserName}</h3>
-						<div className="panel-toolbar v-centered" >
-							<span className="fa fa-twitter text-info"/>
-						</div>
-					</div>
-					<div className="panel-body rs-col-stacked full-width-on-mobile border-items borderless m-a-0">
-                        <ul className="list-group m-b-0">
-    						{Object.keys(osData.names).map((osName, index) => {
-                                const bookings = osData.names[osName].bookings;
-
-                                return bookings.length > 0 ?
-                                    (
-                                        <li className="list-group-item" key={index}>
-                                            {osName}
-                                            <span className="label label-success m-a-0 p-x pull-right">
-                                            {bookings.length}
-                                            </span>
-                                        </li>
-                                    )
-                                : null;
-                            })}
-                        </ul>
-					</div>
-				</div>
-            );
-        })
-    }
-
-
-    render() {
-        const pages = this.props.navigationPages || [];
-        const devicesData = groupPagesByDevices(pages);
-
+    renderPage(devicesData) {
         // Devices browsers
         const deviceNames = Object.keys(devicesData);
         const colors = generateColorsToPie(Object.keys(devicesData).length);
         const visits = getVisitFromPages(devicesData);
 
-         // Top OS names
+        // Top OS names
         const osVisits = getOSNameFromPages(devicesData);
 
         const pieDataPercent = devicePercentTraffic(devicesData, visits);
@@ -193,11 +155,51 @@ class DashboardDevice extends React.Component {
             </div>
         );
     }
+
+    componentDidMount() {
+        this.refreshData();
+    }
+
+    componentDidUpdate() {
+        this.refreshData();
+    }
+
+    refreshData() {
+        //const pages = this.props.navigationPages || [];
+        //const loading = this.props.loadingDevices;
+        //
+        //console.log(pages)
+        //console.log(loading)
+        //console.log("----------");
+        //
+        //if (pages.length > 0 && loading) {
+        //    this.props.dispatch(formatDevicesIfNeeded());
+        //}
+    }
+
+    render() {
+        const loading = this.props.loadingDevices;
+        const devicesData = this.props.devicesData;
+
+        console.log(this.props.navigationPages);
+
+        if (loading) {
+            return <Loader />;
+        }
+
+        if (devicesData) {
+            return this.renderPage(devicesData);
+        }
+
+        return null;
+    }
 }
 
 const mapStateToProps = (state) => {
     return {
-        navigationPages: reducers(state).getPages.navigationPages
+        navigationPages: reducers(state).getPages.navigationPages,
+        loadingDevices: reducers(state).devices.loadingDevices,
+        devicesData: reducers(state).devices.devicesData
     };
 };
 

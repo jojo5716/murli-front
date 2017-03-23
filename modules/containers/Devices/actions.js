@@ -5,6 +5,7 @@ import { apiURL } from '../../../config';
 
 import { groupPagesByDevices } from '../../../helpers/devices';
 import { groupBySections } from '../../../helpers/pages';
+import { loadingComponents, loadedComponents } from '../../../actions/components';
 
 // Actions
 function changePages(navigationPages) {
@@ -16,11 +17,11 @@ function changePages(navigationPages) {
     };
 }
 
-function loadingDevices() {
+function loadingDevices(loadingDevices = true) {
     return {
         type: actions.LOADING_DEVICES,
         payload: {
-            devicesData: []
+            loadingDevices
         }
     };
 }
@@ -32,12 +33,6 @@ function loadedDevices(devicesData) {
         payload: {
             devicesData
         }
-    };
-}
-
-function loadingDevicesPages() {
-    return {
-        type: actions.LOADING_DEVICES_PAGES
     };
 }
 
@@ -59,14 +54,19 @@ const formatDevices = state => (dispatch) => {
 
     if (state.getProjects.projectSelected) {
         if (pages.length > 0) {
-            new Promise(groupPagesByDevices.bind(this, pages)).then(devicesData => {
+            new Promise(groupPagesByDevices.bind(this, pages))
+
+            .then(devicesData => {
                 dispatch(loadedDevices(devicesData));
-            }).catch(err => {
+            })
+            .then(() => {
+                dispatch(loadingDevices(false));
+            })
+            .catch(err => {
                 console.log(err);
             });
         }
     }
-
 };
 
 const shouldFormatDevices = state => {
@@ -101,6 +101,7 @@ const shouldFetchPages = (state) => {
 const fetchPages = (state) => (dispatch) => {
     const checkIn = state.getDates.checkIn;
     const checkOut = state.getDates.checkOut;
+    dispatch(loadingComponents());
 
     if (state.getProjects.projectSelected) {
         const url = replaceParams(apiURL.getPagesByDate, [checkIn, checkOut, state.getProjects.projectSelected]);
@@ -112,10 +113,10 @@ const fetchPages = (state) => (dispatch) => {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
             }
         })
-        .then(response => response.json()
-        .then(json => dispatch(changePages(json.navigationPages))));
+        .then(response => response.json())
+        .then(json => dispatch(changePages(json.navigationPages)))
+        .then(dispatch(loadedComponents()));
     }
-
 };
 
 const fetchPagesIfNeeded = () => (dispatch, getState) => {
@@ -168,5 +169,6 @@ module.exports = {
     loadedDevices,
     fetchPagesIfNeeded,
     formatDevicesIfNeeded,
-    formatDevicesPagesIfNeeded
+    formatDevicesPagesIfNeeded,
+    shouldFetchPages
 };

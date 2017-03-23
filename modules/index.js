@@ -10,11 +10,12 @@ import BreadCrumb from './components/BreadCrumb';
 import Footer from './components/Footer';
 
 import reducers from '../reducers/';
-import { loadedComponents } from '../actions'
+import { loadedComponents } from '../actions';
 
 class App extends React.Component {
 
     renderLoading() {
+        console.log("loading.........")
         return (
             <div className="row">
                 <div className="col-md-12 loadingContent">
@@ -72,7 +73,7 @@ const mapStateToProps = (state) => {
     return {
         checkIn: reducers(state).getDates.checkIn,
         checkOut: reducers(state).getDates.checkOut,
-        pages: reducers(state).getPages,
+        pages: reducers(state).getPages.navigationPages,
         loading: reducers(state).getPages.loading,
         projects: reducers(state).getProjects.projects,
         projectSelected: reducers(state).getProjects.projectSelected,

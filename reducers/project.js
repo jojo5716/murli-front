@@ -22,7 +22,7 @@ export function getProjects(state = initialStateProjects, action = {}) {
                 projects: action.payload.projects
             });
 
-        case actions.CHANGE_PROJECT:
+        case actions.CHANGE_PROJECT_SELECTED:
             return Object.assign({}, state, {
                 projectSelected: action.payload.projectSelected
             });
