@@ -36,6 +36,7 @@ function loadedDevices(devicesData) {
     };
 }
 
+
 function loadedDevicesPages(devicesPagesData) {
 
     return {
@@ -54,13 +55,14 @@ const formatDevices = state => (dispatch) => {
 
     if (state.getProjects.projectSelected) {
         if (pages.length > 0) {
+            dispatch(loadingComponents());
             new Promise(groupPagesByDevices.bind(this, pages))
 
             .then(devicesData => {
                 dispatch(loadedDevices(devicesData));
             })
             .then(() => {
-                dispatch(loadingDevices(false));
+                console.log("Devices formated..")
             })
             .catch(err => {
                 console.log(err);
@@ -101,9 +103,9 @@ const shouldFetchPages = (state) => {
 const fetchPages = (state) => (dispatch) => {
     const checkIn = state.getDates.checkIn;
     const checkOut = state.getDates.checkOut;
-    dispatch(loadingComponents());
 
     if (state.getProjects.projectSelected) {
+        dispatch(loadingComponents());
         const url = replaceParams(apiURL.getPagesByDate, [checkIn, checkOut, state.getProjects.projectSelected]);
 
         return fetch(url, {
@@ -115,7 +117,6 @@ const fetchPages = (state) => (dispatch) => {
         })
         .then(response => response.json())
         .then(json => dispatch(changePages(json.navigationPages)))
-        .then(dispatch(loadedComponents()));
     }
 };
 

@@ -57,7 +57,7 @@ class App extends React.Component {
                         <div className="rs-content">
                             <div className="rs-inner">
                                 <BreadCrumb />
-                                { this.props.loadingComponents ? this.renderLoading() : this.renderChildren() }
+                                { this.renderChildren() }
                             </div>
                         </div>
                     </article>
@@ -74,7 +74,6 @@ const mapStateToProps = (state) => {
         checkIn: reducers(state).getDates.checkIn,
         checkOut: reducers(state).getDates.checkOut,
         pages: reducers(state).getPages.navigationPages,
-        loading: reducers(state).getPages.loading,
         projects: reducers(state).getProjects.projects,
         projectSelected: reducers(state).getProjects.projectSelected,
         isFetching: reducers(state).getProjects.isFetching,

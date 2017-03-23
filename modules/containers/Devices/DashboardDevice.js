@@ -11,6 +11,8 @@ import {
 } from '../../../helpers/devices';
 
 import { formatDevicesIfNeeded } from '../../../actions/';
+import { loadedComponents } from '../../../actions/components';
+
 // Charts modules
 import Pie from '../../components/charts/Pie';
 import Bar from '../../components/charts/Bar';
@@ -165,23 +167,22 @@ class DashboardDevice extends React.Component {
     }
 
     refreshData() {
-        //const pages = this.props.navigationPages || [];
-        //const loading = this.props.loadingDevices;
-        //
-        //console.log(pages)
-        //console.log(loading)
-        //console.log("----------");
-        //
-        //if (pages.length > 0 && loading) {
-        //    this.props.dispatch(formatDevicesIfNeeded());
-        //}
+        const pages = this.props.navigationPages || [];
+        const loading = this.props.loadingComponents;
+
+        console.log(pages)
+        console.log(loading)
+        console.log("-----------")
+
+        if (pages.length > 0 && loading) {
+           this.props.dispatch(formatDevicesIfNeeded());
+           this.props.dispatch(loadedComponents());
+        }
     }
 
     render() {
-        const loading = this.props.loadingDevices;
+        const loading = this.props.loadingComponents;
         const devicesData = this.props.devicesData;
-
-        console.log(this.props.navigationPages);
 
         if (loading) {
             return <Loader />;
@@ -191,14 +192,14 @@ class DashboardDevice extends React.Component {
             return this.renderPage(devicesData);
         }
 
-        return null;
+        return <Loader />;
     }
 }
 
 const mapStateToProps = (state) => {
     return {
         navigationPages: reducers(state).getPages.navigationPages,
-        loadingDevices: reducers(state).devices.loadingDevices,
+        loadingComponents: reducers(state).components.loading,
         devicesData: reducers(state).devices.devicesData
     };
 };
