@@ -10,12 +10,7 @@ import Loader from '../../components/Loader';
 class PerPagesDevice extends React.Component {
 
     refreshData() {
-        const pages = this.props.navigationPages || [];
-        const loading = this.props.loadingDevicesPages;
-
-        if (pages.length > 0 && loading) {
-            this.props.dispatch(formatDevicesPagesIfNeeded());
-        }
+        this.props.dispatch(formatDevicesPagesIfNeeded());
     }
 
     componentDidMount() {
@@ -23,7 +18,8 @@ class PerPagesDevice extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.navigationPages !== this.props.navigationPages) {
+        if ((prevProps.navigationPages !== this.props.navigationPages) || (
+            prevProps.navigationPages.length === 0 && this.props.navigationPages.length === 0)) {
             this.refreshData();
         }
     }
@@ -85,19 +81,18 @@ class PerPagesDevice extends React.Component {
     }
 
     render() {
-        const loading = this.props.loadingDevicesPages;
+        const loading = this.props.loadingComponents;
         const pagesData = this.props.devicesPagesData;
 
         if (loading) {
             return <Loader/>;
         }
 
-        if (pagesData) {
+        if (this.props.navigationPages.length > 0) {
             return this.renderPage(pagesData);
         }
 
-        return null;
-
+        return <h1>No data</h1>;
     }
 }
 
@@ -106,7 +101,7 @@ const mapStateToProps = (state) => {
         checkIn: reducers(state).getDates.checkIn,
         checkOut: reducers(state).getDates.checkOut,
         navigationPages: reducers(state).getPages.navigationPages,
-        loadingDevicesPages: reducers(state).components.loading,
+        loadingComponents: reducers(state).components.loading,
         devicesPagesData: reducers(state).devices.devicesPagesData
     };
 };
