@@ -11,12 +11,12 @@ import {
 } from '../../../helpers/devices';
 
 import { formatDevicesIfNeeded } from '../../../actions/';
-import { loadedComponents } from '../../../actions/components';
 
 // Charts modules
 import Pie from '../../components/charts/Pie';
 import Bar from '../../components/charts/Bar';
 import Loader from '../../components/Loader';
+import EmptyData from '../../components/EmptyData';
 
 class DashboardDevice extends React.Component {
 
@@ -185,7 +185,12 @@ class DashboardDevice extends React.Component {
             return this.renderPage(this.props.devicesData);
         }
 
-        return <h1>No data</h1>;
+        return (
+            <EmptyData
+                title="No data"
+                message="Maybe that range do not have any data"
+            />
+        );
     }
 }
 

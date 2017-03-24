@@ -6,6 +6,7 @@ import BoxChart from '../../components/BoxChart';
 import { groupBySections } from '../../../helpers/pages';
 import { formatDevicesPagesIfNeeded } from '../../../actions/';
 import Loader from '../../components/Loader';
+import EmptyData from '../../components/EmptyData';
 
 class PerPagesDevice extends React.Component {
 
@@ -92,7 +93,12 @@ class PerPagesDevice extends React.Component {
             return this.renderPage(pagesData);
         }
 
-        return <h1>No data</h1>;
+        return (
+            <EmptyData
+                title="No data"
+                message="Maybe that range do not have any data"
+            />
+        );
     }
 }
 

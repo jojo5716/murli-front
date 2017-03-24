@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 import reducers from '../reducers/';
 import { loadedComponents } from '../actions';
 import Loader from './components/Loader';
+import EmptyData from './components/EmptyData';
 
 class App extends React.Component {
 
@@ -28,17 +29,8 @@ class App extends React.Component {
     }
 
     renderProjectNotFound() {
-        const style = { marginTop: '-98.5px', marginBottom: '75px' };
-
         return (
-            <div className="special-page-content text-center v-centered" style={style}>
-                <h2 className="f-w-700 heading-text-xl m-a-0">
-                    Without project
-                </h2>
-                <h5 className="f-w-400 f-l-15 text-uppercase text-muted">
-                    Please select a project
-                </h5>
-            </div>
+            <EmptyData title="Without project" message="Please select a project"/>
         );
     }
 
