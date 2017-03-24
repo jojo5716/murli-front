@@ -17,6 +17,7 @@ import reducers from './reducers';
 
 const middleware = [thunk];
 
+
 if (process.env.NODE_ENV === 'debugger') {
     middleware.push(createLogger());
 }

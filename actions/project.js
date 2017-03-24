@@ -2,7 +2,7 @@ import 'isomorphic-fetch';
 
 import { actions } from './constants';
 import { apiURL } from '../config';
-import { shouldFetchPages, fetchPagesIfNeeded } from '../modules/containers/Devices/actions';
+import { shouldFetchPages, fetchPagesIfNeeded } from './devices';
 
 
 function changeProject(payload) {
@@ -28,12 +28,9 @@ const fetchProjects = () => (dispatch) => {
 
 
 function changeProjectSelected(payload) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch(changeProject(payload));
-
-        if (shouldFetchPages(getState())) {
-            return dispatch(fetchPagesIfNeeded());
-        }
+        dispatch(fetchPagesIfNeeded());
     };
 }
 

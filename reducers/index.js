@@ -5,7 +5,7 @@ import { getPages } from './pages';
 import { getProjects } from './project';
 import { components } from './components';
 
-import { devices } from '../modules/containers/Devices/reducers';
+import { devices } from './devices';
 
 const rootReducer = combineReducers({
     getDates,

@@ -11,17 +11,19 @@ import Footer from './components/Footer';
 
 import reducers from '../reducers/';
 import { loadedComponents } from '../actions';
+import Loader from './components/Loader';
 
 class App extends React.Component {
 
+    componentDidMount() {
+        if (this.props.loadingComponents) {
+            this.props.dispatch(loadedComponents());
+        }
+    }
+
     renderLoading() {
-        console.log("loading.........")
         return (
-            <div className="row">
-                <div className="col-md-12 loadingContent">
-                    <Spinner spinnerName="three-bounce"/>
-                </div>
-            </div>
+            <Loader/>
         );
     }
 
@@ -49,21 +51,19 @@ class App extends React.Component {
 
     render() {
         return (
-            <AsyncComponentProvider>
-                <div>
-                    <Header/>
-                    <Menu/>
-                    <article className="rs-content-wrapper">
-                        <div className="rs-content">
-                            <div className="rs-inner">
-                                <BreadCrumb />
-                                { this.renderChildren() }
-                            </div>
+            <div>
+                <Header/>
+                <Menu/>
+                <article className="rs-content-wrapper">
+                    <div className="rs-content">
+                        <div className="rs-inner">
+                            <BreadCrumb />
+                            { this.renderChildren() }
                         </div>
-                    </article>
-                    <Footer/>
-                </div>
-            </AsyncComponentProvider>
+                    </div>
+                </article>
+                <Footer/>
+            </div>
         );
     }
 }

@@ -12,8 +12,7 @@ import {
     changeCheckOut,
     changeProjectSelected,
     fetchAllProjectsIfNeeded,
-    fetchPagesIfNeeded,
-    loadingDevices
+    fetchPagesIfNeeded
 } from '../../actions/';
 
 import { hourMightnight, dateFormat, hourEndDay } from '../../config';
@@ -134,9 +133,7 @@ const mapStateToProps = (state) => {
     return {
         checkIn: reducers(state).getDates.checkIn,
         checkOut: reducers(state).getDates.checkOut,
-        pages: reducers(state).getPages.pages,
         projects: reducers(state).getProjects.projects,
-        projectSelected: reducers(state).getProjects.projectSelected
     };
 };
 

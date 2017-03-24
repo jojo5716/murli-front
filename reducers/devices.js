@@ -1,4 +1,4 @@
-import { actions } from '../../../actions/constants';
+import { actions } from '../actions/constants';
 
 const initialState = {
     loadingDevices: true,

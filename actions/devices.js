@@ -1,11 +1,11 @@
 import 'isomorphic-fetch';
-import { actions } from '../../../actions/constants';
-import { replaceParams } from '../../../helpers/apiURL';
-import { apiURL } from '../../../config';
+import { actions } from './constants';
+import { replaceParams } from '../helpers/apiURL';
+import { apiURL } from '../config';
 
-import { groupPagesByDevices } from '../../../helpers/devices';
-import { groupBySections } from '../../../helpers/pages';
-import { loadingComponents, loadedComponents } from '../../../actions/components';
+import { groupPagesByDevices } from '../helpers/devices';
+import { groupBySections } from '../helpers/pages';
+import { loadingComponents, loadedComponents } from './components';
 
 // Actions
 function changePages(navigationPages) {
@@ -53,40 +53,25 @@ function loadedDevicesPages(devicesPagesData) {
 const formatDevices = state => (dispatch) => {
     const pages = state.getPages.navigationPages;
 
-    if (state.getProjects.projectSelected) {
-        if (pages.length > 0) {
-            dispatch(loadingComponents());
-            new Promise(groupPagesByDevices.bind(this, pages))
-
-            .then(devicesData => {
-                dispatch(loadedDevices(devicesData));
-            })
-            .then(() => {
-                console.log("Devices formated..")
-            })
-            .catch(err => {
-                console.log(err);
-            });
-        }
+    if (state.getProjects.projectSelected && pages.length > 0) {
+        dispatch(loadingComponents());
+        new Promise(groupPagesByDevices.bind(this, pages))
+        .then(devicesData => {
+            dispatch(loadedDevices(devicesData));
+        })
+        .then(() => {
+            dispatch(loadedComponents());
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
-};
-
-const shouldFormatDevices = state => {
-    let shouldFormat = false;
-
-    if (state.getPages.navigationPages) {
-        shouldFormat = true;
-    }
-
-    return shouldFormat;
 };
 
 const formatDevicesIfNeeded = () => (dispatch, getState) => {
     const state = getState();
 
-    if (shouldFormatDevices(state)) {
-        return dispatch(formatDevices(state));
-    }
+    return dispatch(formatDevices(state));
 };
 // Devices
 
@@ -117,6 +102,8 @@ const fetchPages = (state) => (dispatch) => {
         })
         .then(response => response.json())
         .then(json => dispatch(changePages(json.navigationPages)))
+        .then(() => dispatch(loadedComponents()));
+
     }
 };
 

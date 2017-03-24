@@ -162,37 +162,30 @@ class DashboardDevice extends React.Component {
         this.refreshData();
     }
 
-    componentDidUpdate() {
-        this.refreshData();
+    componentDidUpdate(prevProps) {
+
+        if ((prevProps.navigationPages !== this.props.navigationPages) || (
+                prevProps.navigationPages.length === 0 && this.props.navigationPages.length === 0)) {
+            this.refreshData();
+        }
     }
 
     refreshData() {
-        const pages = this.props.navigationPages || [];
-        const loading = this.props.loadingComponents;
-
-        console.log(pages)
-        console.log(loading)
-        console.log("-----------")
-
-        if (pages.length > 0 && loading) {
-           this.props.dispatch(formatDevicesIfNeeded());
-           this.props.dispatch(loadedComponents());
-        }
+        this.props.dispatch(formatDevicesIfNeeded());
     }
 
     render() {
         const loading = this.props.loadingComponents;
-        const devicesData = this.props.devicesData;
 
         if (loading) {
             return <Loader />;
         }
 
-        if (devicesData) {
-            return this.renderPage(devicesData);
+        if (this.props.navigationPages.length > 0) {
+            return this.renderPage(this.props.devicesData);
         }
 
-        return <Loader />;
+        return <h1>No data</h1>;
     }
 }
 

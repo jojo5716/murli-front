@@ -5,6 +5,7 @@ import BoxChart from '../../components/BoxChart';
 
 import { groupBySections } from '../../../helpers/pages';
 import { formatDevicesPagesIfNeeded } from '../../../actions/';
+import Loader from '../../components/Loader';
 
 class PerPagesDevice extends React.Component {
 
@@ -21,8 +22,10 @@ class PerPagesDevice extends React.Component {
         this.refreshData();
     }
 
-    componentDidUpdate() {
-        this.refreshData();
+    componentDidUpdate(prevProps) {
+        if (prevProps.navigationPages !== this.props.navigationPages) {
+            this.refreshData();
+        }
     }
 
     renderPage(pages) {
@@ -86,7 +89,7 @@ class PerPagesDevice extends React.Component {
         const pagesData = this.props.devicesPagesData;
 
         if (loading) {
-            return <h1>Loading...</h1>;
+            return <Loader/>;
         }
 
         if (pagesData) {
@@ -103,7 +106,7 @@ const mapStateToProps = (state) => {
         checkIn: reducers(state).getDates.checkIn,
         checkOut: reducers(state).getDates.checkOut,
         navigationPages: reducers(state).getPages.navigationPages,
-        loadingDevicesPages: reducers(state).devices.loadingDevicesPages,
+        loadingDevicesPages: reducers(state).components.loading,
         devicesPagesData: reducers(state).devices.devicesPagesData
     };
 };
