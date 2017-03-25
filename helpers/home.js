@@ -1,5 +1,5 @@
 import _ from 'lodash';
-
+import moment from 'moment';
 
 function bookingsToJSON(bookings) {
     return _.forEach(bookings, (booking) => {
@@ -32,58 +32,15 @@ export function usersWithBookings(navigationPages) {
     return rooms;
 }
 
-function saveRoom(room, bookings) {
-    if (!bookings.rooms[room.roomCode]) {
-        bookings.rooms[room.roomCode] = { total: 0, quantity: 0 };
+
+
+function saveBookingMetric(metric, key, total, bookings) {
+    if (!bookings[metric][key]) {
+        bookings[metric][key] = { total: 0, quantity: 0 };
     }
 
-    bookings.rooms[room.roomCode].total += room.amount;
-    bookings.rooms[room.roomCode].quantity += 1;
-}
-
-function saveBoards(room, bookings) {
-    if (!bookings.boards[room.boardCode]) {
-        bookings.boards[room.boardCode] = { total: 0, quantity: 0 };
-    }
-
-    bookings.boards[room.boardCode].total += room.amount;
-    bookings.boards[room.boardCode].quantity += 1;
-}
-
-function saveRates(room, bookings) {
-    if (!bookings.rates[room.rateCode]) {
-        bookings.rates[room.rateCode] = { total: 0, quantity: 0 };
-    }
-
-    bookings.rates[room.rateCode].total += room.amount;
-    bookings.rates[room.rateCode].quantity += 1;
-}
-
-function saveCountries(user, room, bookings) {
-    if (!bookings.countries[user.country]) {
-        bookings.countries[user.country] = { total: 0, quantity: 0 };
-    }
-
-    bookings.countries[user.country].total += room.amount;
-    bookings.countries[user.country].quantity += 1;
-}
-
-function saveOccupancies(room, bookings) {
-    if (!bookings.occupancies[room.occupancyCode]) {
-        bookings.occupancies[room.occupancyCode] = { total: 0, quantity: 0 };
-    }
-
-    bookings.occupancies[room.occupancyCode].total += room.amount;
-    bookings.occupancies[room.occupancyCode].quantity += 1;
-}
-
-function saveDays(room, bookings) {
-    if (!bookings.days[room.checkin]) {
-        bookings.days[room.checkin] = { total: 0, quantity: 0 };
-    }
-
-    bookings.days[room.checkin].total += room.amount;
-    bookings.days[room.checkin].quantity += 1;
+    bookings[metric][key].total += total;
+    bookings[metric][key].quantity += 1;
 }
 
 export function formatBookings(navPages) {
@@ -105,14 +62,18 @@ export function formatBookings(navPages) {
 
             if (booking.rooms) {
                 _.forEach(booking.rooms, (room) => {
-                    bookings.totalAmount += room.amount;
+                    const total = room.amount;
+                    const createAt = moment(navPage.user.createAt).format('YYYY-MM-DD');
+                    bookings.totalAmount += total;
                     bookings.totalRooms += 1;
-                    saveRoom(room, bookings);
-                    saveBoards(room, bookings);
-                    saveRates(room, bookings);
-                    saveOccupancies(room, bookings);
-                    saveDays(room, bookings);
-                    saveCountries(navPage.user, room, bookings);
+                    // saveRoom(room, bookings);
+                    saveBookingMetric('rooms', room.roomCode, total, bookings);
+                    saveBookingMetric('boards', room.boardCode, total, bookings);
+                    saveBookingMetric('rates', room.rateCode, total, bookings);
+                    saveBookingMetric('occupancies', room.occupancyCode, total, bookings);
+
+                    saveBookingMetric('days', createAt, total, bookings);
+                    saveBookingMetric('countries', navPage.user.country, total, bookings);
                 });
             }
         });
@@ -122,16 +83,20 @@ export function formatBookings(navPages) {
 }
 
 
-export function roomsChart(header, bookingsInfo) {
-    const roomData = [header];
+export function chartMetric(header, bookingsInfo, metricKey, isAmount = false) {
+    const metricData = [header];
 
-    _.forEach(Object.keys(bookingsInfo.rooms), (room) => {
-        const roomObj = bookingsInfo.rooms[room];
-        const total = `${roomObj.total.toFixed(2)} €`;
-        roomData.push([room, roomObj.quantity, total]);
+    _.forEach(Object.keys(bookingsInfo[metricKey]), (metric) => {
+        const metricObj = bookingsInfo[metricKey][metric];
+        let total = metricObj.total;
+
+        if (isAmount) {
+            total = `${total} €`;
+        }
+        metricData.push([metric, metricObj.quantity, total]);
     });
 
-    return roomData;
+    return metricData;
 }
 
 export function countriesChart(header, bookingInfo) {
@@ -180,13 +145,19 @@ export function occupanciesChart(header, bookingInfo) {
 }
 
 export function bookingsDayChart(header, bookingInfo) {
-    const occupanciesData = [header];
+    const bookingDayData = [header];
 
-    _.forEach(Object.keys(bookingInfo.days), (day) => {
-
-        const daybj = bookingInfo.days[day];
-        occupanciesData.push([day, daybj.quantity, daybj.total]);
+    const orderedDates = {};
+    Object.keys(bookingInfo.days).sort((a, b) => {
+        return moment(b, 'DD/MM/YYYY').toDate() - moment(a, 'DD/MM/YYYY').toDate();
+    }).forEach((key) => {
+        orderedDates[key] = bookingInfo.days[key];
     });
 
-    return occupanciesData;
+    _.forEach(Object.keys(orderedDates), (day) => {
+        const daybj = bookingInfo.days[day];
+        bookingDayData.push([day, daybj.quantity, daybj.total]);
+    });
+
+    return bookingDayData;
 }

@@ -12,141 +12,159 @@ import {
     boardsChart,
     ratesChart,
     occupanciesChart,
-    bookingsDayChart
+    bookingsDayChart,
+    chartMetric
 } from '../../helpers/home';
 import GoogleChart from '../components/charts/GoogleChart';
+import BoxContent from '../components/BoxContent';
+import Alert from '../components/Alert';
 
 
 class Home extends React.Component {
 
     renderHeader(bookingsInfo) {
+        const totalBookings = this.renderBoxChart({
+            title: 'Nº Bookings',
+            content: bookingsInfo.totalBookings,
+            textContent: 'Bookings'
+        });
+
+        const totalAmountBookings = this.renderBoxChart({
+            title: 'Total booking amounts',
+            content: bookingsInfo.totalAmount.toFixed(2),
+            textContent: '€'
+        });
+
+        const totalRoomsBookings = this.renderBoxChart({
+            title: 'Nº Rooms',
+            content: Object.keys(bookingsInfo.rooms).length,
+            textContent: 'Room type'
+        });
+
+        const totalCountriesBooking = this.renderBoxChart({
+            title: 'Nº Countries',
+            content: Object.keys(bookingsInfo.countries).length,
+            textContent: 'Countries'
+        });
+
         return (
             <div className="row">
                 <div className="col-md-3">
-                    <BoxChart
-                        content={bookingsInfo.totalBookings}
-                        title="Nº Bookings"
-                        textContent="Bookings"
-                        percent="0"
-                        showPercent={false}
-                    />
+                    { totalBookings }
                 </div>
 
                 <div className="col-md-3">
-                    <BoxChart
-                        content={bookingsInfo.totalAmount.toFixed(2)}
-                        title="Total amount Bookings"
-                        textContent="€"
-                        percent="0"
-                        showPercent={false}
-                    />
+                    { totalAmountBookings }
                 </div>
 
                 <div className="col-md-3">
-                    <BoxChart
-                        content={Object.keys(bookingsInfo.rooms).length}
-                        title="Nº rooms"
-                        textContent="Rooms type"
-                        percent="0"
-                        showPercent={false}
-                    />
+                    { totalRoomsBookings }
                 </div>
 
                 <div className="col-md-3">
-                    <BoxChart
-                        content={Object.keys(bookingsInfo.countries).length}
-                        title="Nº countries"
-                        textContent="Countries"
-                        percent="0"
-                        showPercent={false}
-                    />
+                    { totalCountriesBooking }
                 </div>
             </div>
         );
     }
 
-    renderBookingChart(bookingsInfo) {
-        const header = ['Rooms', 'Quantity', { role: 'annotation' }];
-        const chartData = roomsChart(header, bookingsInfo);
-
+    renderBoxChart(data) {
         return (
-            <GoogleChart
-                data={chartData}
-                hAxis="Rooms code"
-                chartType="ColumnChart"
-                titleChart="Reserved rooms"
-                vAxis="Quantity"
+            <BoxChart
+                content={data.content}
+                title={data.title}
+                textContent={data.textContent}
+                percent="0"
+                showPercent={false}
             />
         );
+    }
+
+    renderRoomsChart(bookingsInfo) {
+        const header = ['Rooms', 'Quantity', { role: 'annotation' }];
+        const chartData = chartMetric(header, bookingsInfo, 'rooms', true);
+
+        const optionals = {
+            hAxis: 'Rooms code',
+            chartType: 'ColumnChart',
+            titleChart: 'Reserved rooms'
+        };
+
+        return this.renderMetricChart(chartData, optionals);
     }
 
     renderCountriesChart(bookingsInfo) {
         const header = ['Country', 'Bookings', { role: 'annotation' }];
-        const chartData = countriesChart(header, bookingsInfo);
+        const chartData = chartMetric(header, bookingsInfo, 'countries', true);
 
-        return (
-            <GoogleChart
-                data={chartData}
-                hAxis="Country code"
-                vAxis="Booking number"
-                chartType="ColumnChart"
-                titleChart="Booking per country"
-            />
-        );
+        const optionals = {
+            hAxis: 'Country code',
+            chartType: 'ColumnChart',
+            titleChart: 'Bookings per country'
+        };
+
+        return this.renderMetricChart(chartData, optionals);
     }
 
     renderBoardsChart(bookingsInfo) {
         const header = ['Board', 'Bookings', 'Total'];
-        const chartData = boardsChart(header, bookingsInfo);
+        const chartData = chartMetric(header, bookingsInfo, 'boards');
 
-        return (
-            <GoogleChart
-                data={chartData}
-                hAxis="Board code"
-                chartType="BubbleChart"
-                titleChart="Booking per boards"
-            />
-        );
+        const optionals = {
+            hAxis: 'Board code',
+            chartType: 'BubbleChart',
+            titleChart: 'Bookings per boards'
+        };
+
+        return this.renderMetricChart(chartData, optionals);
     }
 
     renderRatesChart(bookingsInfo) {
         const header = ['Rate', 'Bookings', 'Total'];
-        const chartData = ratesChart(header, bookingsInfo);
+        const chartData = chartMetric(header, bookingsInfo, 'rates');
 
-        return (
-            <GoogleChart
-                data={chartData}
-                hAxis="Rate code"
-                chartType="BubbleChart"
-                titleChart="Booking per rates"
-            />
-        );
+        const optionals = {
+            hAxis: 'Rate code',
+            chartType: 'BubbleChart',
+            titleChart: 'Bookings per rates'
+        };
+
+        return this.renderMetricChart(chartData, optionals);
     }
 
     renderOccupanciesChart(bookingsInfo) {
         const header = ['Rate', 'Bookings', 'Total'];
-        const chartData = occupanciesChart(header, bookingsInfo);
+        const chartData = chartMetric(header, bookingsInfo, 'occupancies');
 
-        return (
-            <GoogleChart
-                data={chartData}
-                hAxis="Occupancy code"
-                chartType="BubbleChart"
-                titleChart="Booking per occupancies"
-            />
-        );
+        const optionals = {
+            hAxis: 'Occupancy code',
+            chartType: 'BubbleChart',
+            titleChart: 'Bookings per occupancies'
+        };
+
+        return this.renderMetricChart(chartData, optionals);
     }
 
     renderBookingsDayChart(bookingsInfo) {
         const header = ['Day', 'Bookings', 'Total'];
         const chartData = bookingsDayChart(header, bookingsInfo);
 
+        const optionals = {
+            hAxis: 'Day',
+            chartType: 'BubbleChart',
+            titleChart: 'Bookings per day'
+        };
+
+        return this.renderMetricChart(chartData, optionals);
+    }
+
+    renderMetricChart(chartData, args) {
         return (
             <GoogleChart
                 data={chartData}
-                hAxis="Day"
-                chartType="LineChart"
-                titleChart="Booking per day"
+                hAxis={args.hAxis}
+                chartType={args.chartType}
+                titleChart={args.titleChart}
             />
         );
     }
@@ -155,118 +173,46 @@ class Home extends React.Component {
         const bookingUsers = usersWithBookings(this.props.navigationPages);
         const bookingsInfo = formatBookings(bookingUsers);
 
-        console.log(bookingsInfo);
-
         return (
             <div className="container-fluid">
-                { this.renderHeader(bookingsInfo)}
+                <Alert message="All amounts are expressed in the hotel's default currency (EUR / €)"/>
+
+                { this.renderHeader(bookingsInfo) }
                 <div className="row">
                     <div className="col-md-6">
-                        <div className="panel panel-plain panel-rounded">
-                            <div className="panel-heading">
-                                <h3 className="panel-title">Booking rooms</h3>
-                                <p className="subtitle text-uppercase m-t">Total of rooms bookings</p>
-                                <div className="panel-toolbar v-centered" >
-                                    <ul className="list-inline m-a-0">
-                                        <li><i className="rs-close-panel icon-toolbar gcon gcon-cross"/></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className="panel-body">
-                                { this.renderBookingChart(bookingsInfo)}
-                            </div>
-                        </div>
+                        <BoxContent title="Booking rooms" subtitle="Booking per room">
+                            { this.renderRoomsChart(bookingsInfo) }
+                        </BoxContent>
                     </div>
 
                     <div className="col-md-6">
-                        <div className="panel panel-plain panel-rounded">
-                            <div className="panel-heading">
-                                <h3 className="panel-title">Booking country</h3>
-                                <p className="subtitle text-uppercase m-t">Bookings by country</p>
-                                <div className="panel-toolbar v-centered" >
-                                    <ul className="list-inline m-a-0">
-                                        <li><i className="rs-close-panel icon-toolbar gcon gcon-cross"/></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className="panel-body">
-                                { this.renderCountriesChart(bookingsInfo)}
-                            </div>
-                        </div>
+                        <BoxContent title="Booking country" subtitle="Bookings by country">
+                            { this.renderCountriesChart(bookingsInfo) }
+                        </BoxContent>
                     </div>
 
                     <div className="col-md-6">
-                        <div className="panel panel-plain panel-rounded">
-                            <div className="panel-heading">
-                                <h3 className="panel-title">Booking boards</h3>
-                                <p className="subtitle text-uppercase m-t">Boards per booking</p>
-                                <div className="panel-toolbar v-centered" >
-                                    <ul className="list-inline m-a-0">
-                                        <li><i className="rs-close-panel icon-toolbar gcon gcon-cross"/></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className="panel-body">
-                                { this.renderBoardsChart(bookingsInfo)}
-                            </div>
-                        </div>
+                        <BoxContent title="Booking boards" subtitle="Bookings by boards">
+                            { this.renderBoardsChart(bookingsInfo)}
+                        </BoxContent>
                     </div>
 
                     <div className="col-md-6">
-                        <div className="panel panel-plain panel-rounded">
-                            <div className="panel-heading">
-                                <h3 className="panel-title">Booking rates</h3>
-                                <p className="subtitle text-uppercase m-t">Rates per booking</p>
-                                <div className="panel-toolbar v-centered" >
-                                    <ul className="list-inline m-a-0">
-                                        <li><i className="rs-close-panel icon-toolbar gcon gcon-cross"/></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className="panel-body">
-                                { this.renderRatesChart(bookingsInfo)}
-                            </div>
-                        </div>
+                        <BoxContent title="Booking rates" subtitle="Bookings by rates">
+                            { this.renderRatesChart(bookingsInfo)}
+                        </BoxContent>
                     </div>
 
                     <div className="col-md-6">
-                        <div className="panel panel-plain panel-rounded">
-                            <div className="panel-heading">
-                                <h3 className="panel-title">Booking occupancies</h3>
-                                <p className="subtitle text-uppercase m-t">Occupancies per booking</p>
-                                <div className="panel-toolbar v-centered" >
-                                    <ul className="list-inline m-a-0">
-                                        <li><i className="rs-close-panel icon-toolbar gcon gcon-cross"/></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className="panel-body">
-                                { this.renderOccupanciesChart(bookingsInfo)}
-                            </div>
-                        </div>
+                        <BoxContent title="Booking occupancies" subtitle="Bookings by occupancies">
+                            { this.renderOccupanciesChart(bookingsInfo)}
+                        </BoxContent>
                     </div>
 
                     <div className="col-md-6">
-                        <div className="panel panel-plain panel-rounded">
-                            <div className="panel-heading">
-                                <h3 className="panel-title">Booking per day</h3>
-                                <p className="subtitle text-uppercase m-t">Booking per day</p>
-                                <div className="panel-toolbar v-centered" >
-                                    <ul className="list-inline m-a-0">
-                                        <li><i className="rs-close-panel icon-toolbar gcon gcon-cross"/></li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div className="panel-body">
-                                { this.renderBookingsDayChart(bookingsInfo)}
-                            </div>
-                        </div>
+                        <BoxContent title="Booking days" subtitle="Bookings by day">
+                            { this.renderBookingsDayChart(bookingsInfo)}
+                        </BoxContent>
                     </div>
                 </div>
             </div>
