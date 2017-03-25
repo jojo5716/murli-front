@@ -26,6 +26,9 @@ class PerPagesDevice extends React.Component {
     }
 
     renderPage(pages) {
+        console.log(pages);
+        console.log("========")
+
         const totalAvailability = pages.availabilityDestination.total + pages.availability.total;
         const totalPagesVisited = totalAvailability + pages.content.total + pages.noAvailability.total;
 

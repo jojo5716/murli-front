@@ -51,7 +51,8 @@
     "redux-thunk": "^2.2.0",
     "roi-dialog": "^0.2.15",
     "systemjs": "^0.20.10",
-    "user-agent-parser": "^0.6.0"
+    "user-agent-parser": "^0.6.0",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.5.1",

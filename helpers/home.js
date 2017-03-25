@@ -53,7 +53,8 @@ export function formatBookings(navPages) {
         boards: {},
         occupancies: {},
         rates: {},
-        days: {}
+        days: {},
+        info: []
     };
 
     _.forEach(navPages, (navPage) => {
@@ -99,51 +100,6 @@ export function chartMetric(header, bookingsInfo, metricKey, isAmount = false) {
     return metricData;
 }
 
-export function countriesChart(header, bookingInfo) {
-    const countriesData = [header];
-
-    _.forEach(Object.keys(bookingInfo.countries), (country) => {
-        const countryObj = bookingInfo.countries[country];
-        const total = `${countryObj.total.toFixed(2)} €`;
-        countriesData.push([country, countryObj.quantity, total]);
-    });
-
-    return countriesData;
-}
-
-export function boardsChart(header, bookingInfo) {
-    const boardsData = [header];
-
-    _.forEach(Object.keys(bookingInfo.boards), (board) => {
-        const boardObj = bookingInfo.boards[board];
-        boardsData.push([board, boardObj.quantity, boardObj.total]);
-    });
-
-    return boardsData;
-}
-
-export function ratesChart(header, bookingInfo) {
-    const ratesData = [header];
-
-    _.forEach(Object.keys(bookingInfo.rates), (rate) => {
-        const boardObj = bookingInfo.rates[rate];
-        ratesData.push([rate, boardObj.quantity, boardObj.total]);
-    });
-
-    return ratesData;
-}
-
-export function occupanciesChart(header, bookingInfo) {
-    const occupanciesData = [header];
-
-    _.forEach(Object.keys(bookingInfo.occupancies), (occupancy) => {
-        const occupancyObj = bookingInfo.occupancies[occupancy];
-        occupanciesData.push([occupancy, occupancyObj.quantity, occupancyObj.total]);
-    });
-
-    return occupanciesData;
-}
-
 export function bookingsDayChart(header, bookingInfo) {
     const bookingDayData = [header];
 
@@ -160,4 +116,12 @@ export function bookingsDayChart(header, bookingInfo) {
     });
 
     return bookingDayData;
+}
+
+export function roomsTable(booking) {
+    const rooms = [];
+    _.forEach(booking.rooms, (room) => {
+        rooms.push([room.roomCode, room.amount, room.checkin, room.checkout, room.nights]);
+    });
+    return rooms;
 }

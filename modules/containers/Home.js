@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import reducers from '../../reducers/';
 import Loader from '../components/Loader';
@@ -7,17 +8,15 @@ import BoxChart from '../components/BoxChart';
 import {
     usersWithBookings,
     formatBookings,
-    roomsChart,
-    countriesChart,
-    boardsChart,
-    ratesChart,
-    occupanciesChart,
     bookingsDayChart,
-    chartMetric
+    chartMetric,
+    roomsTable
 } from '../../helpers/home';
 import GoogleChart from '../components/charts/GoogleChart';
 import BoxContent from '../components/BoxContent';
 import Alert from '../components/Alert';
+import Collapser from '../components/Collapser';
+import Table from '../components/Table';
 
 
 class Home extends React.Component {
@@ -169,6 +168,44 @@ class Home extends React.Component {
         );
     }
 
+    renderTableBookings(bookingUsers) {
+        const html = [];
+
+        _.forEach(bookingUsers, (page) => {
+            _.forEach(page.user.bookings, (booking) => {
+                const rooms = roomsTable(booking);
+                const titleCollapser = `${booking.bookingCode} - ${booking.bookingStatus}`
+                html.push(
+                    <Collapser title={titleCollapser}>
+                        <table className="table rs-table table-striped table-hover table-b-t">
+                            <thead>
+                            <tr>
+                                <th>Room code</th>
+                                <th>Total</th>
+                                <th>Check in</th>
+                                <th>Check in</th>
+                                <th>Nights</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {rooms.map((room, index) =>
+                                <tr key={index}>
+                                    {room.map((info) =>
+                                        <td>{info}</td>
+                                    )}
+                                </tr>
+                            )}
+                            </tbody>
+                        </table>
+                    </Collapser>
+                );
+            });
+        });
+
+        return html;
+
+    }
+
     renderPage() {
         const bookingUsers = usersWithBookings(this.props.navigationPages);
         const bookingsInfo = formatBookings(bookingUsers);
@@ -214,6 +251,13 @@ class Home extends React.Component {
                             { this.renderBookingsDayChart(bookingsInfo)}
                         </BoxContent>
                     </div>
+
+                    <div className="col-md-6">
+                        <BoxContent title="Booking days" subtitle="Bookings by day">
+                            { this.renderTableBookings(bookingUsers)}
+                        </BoxContent>
+                    </div>
+
                 </div>
             </div>
         );
