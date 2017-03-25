@@ -1,6 +1,5 @@
 import React from 'react';
 import NavLink from './NavLink';
-import Menu from './Menu';
 
 export default class App extends React.Component {
     render() {
@@ -9,12 +8,12 @@ export default class App extends React.Component {
                 <div className="container-fluid">
                     <div className="navbar-header has-right-divider">
                         <div className="rs-logo fixed-width">
-                            <a className="navbar-brand" href="index.html">
+                            <NavLink to="/" className="navbar-brand">
                                 <img
                                     alt="Roiback"
                                     src="https://bookcore.backhotelengine.com/crs/static/imgs/logo_pre.png"
                                 />
-                            </a>
+                            </NavLink>
                         </div>
                         <button
                             type="button"
@@ -66,6 +65,6 @@ export default class App extends React.Component {
                     </div>
                 </div>
             </nav>
-    );
+        );
     }
 }

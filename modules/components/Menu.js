@@ -27,7 +27,7 @@ export default class Menu extends React.Component {
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <span className="badge badge-danger">1</span>
+                            <span className="badge badge-danger">2</span>
                             <span className="gcon gcon-browser rs-icon-menu"/>
                             Devices
                         </a>

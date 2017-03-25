@@ -16,3 +16,8 @@ export default class EmptyData extends Component {
         );
     }
 }
+
+EmptyData.defaultProps = {
+    title: 'No data',
+    message: 'No data to show'
+};

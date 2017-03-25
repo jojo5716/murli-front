@@ -44,15 +44,15 @@ class DashboardDevice extends React.Component {
 
             return (
                 <div className="panel panel-plain" key={index}>
-					<div className="panel-heading">
-						<h3 className="panel-title">
+                    <div className="panel-heading">
+                        <h3 className="panel-title">
                             {browserName}
-                            </h3>
-						<div className="panel-toolbar v-centered" >
-							<span className="fa fa-twitter text-info"/>
-						</div>
-					</div>
-					<div className="panel-body rs-col-stacked full-width-on-mobile border-items borderless m-a-0">
+                        </h3>
+                        <div className="panel-toolbar v-centered" >
+                            <span className="fa fa-twitter text-info"/>
+                        </div>
+                    </div>
+                    <div className="panel-body rs-col-stacked full-width-on-mobile border-items borderless m-a-0">
                         <table className="table rs-table table-striped table-hover table-b-t">
                             <thead>
                             <tr>
@@ -75,8 +75,8 @@ class DashboardDevice extends React.Component {
                             })}
                             </tbody>
                         </table>
-					</div>
-				</div>
+                    </div>
+                </div>
             );
         });
     }
