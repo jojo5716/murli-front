@@ -1,18 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Spinner from 'react-spinkit';
-import { AsyncComponentProvider } from 'react-async-component';
 
 // Components
 import Menu from './components/Menu';
 import Header from './components/Header';
 import BreadCrumb from './components/BreadCrumb';
 import Footer from './components/Footer';
-
 import reducers from '../reducers/';
 import { loadedComponents } from '../actions';
-import Loader from './components/Loader';
 import EmptyData from './components/EmptyData';
+
 
 class App extends React.Component {
 
@@ -20,12 +17,6 @@ class App extends React.Component {
         if (this.props.loadingComponents) {
             this.props.dispatch(loadedComponents());
         }
-    }
-
-    renderLoading() {
-        return (
-            <Loader/>
-        );
     }
 
     renderProjectNotFound() {

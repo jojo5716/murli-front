@@ -12,6 +12,7 @@ import Home from './modules/containers/Home';
 import About from './modules/containers/About';
 import DashboardDevice from './modules/containers/Devices/DashboardDevice';
 import PerPagesDevice from './modules/containers/Devices/PerPagesDevice';
+import AvailabilitySankey from './modules/containers/Devices/AvailabilitySankey';
 
 import reducers from './reducers';
 
@@ -35,6 +36,7 @@ render((
                 <Route path="/about" component={About}/>
                 <Route path="/devices/dashboard" component={DashboardDevice}/>
                 <Route path="/devices/per-pages" component={PerPagesDevice}/>
+                <Route path="/devices/spankey" component={AvailabilitySankey}/>
 
                 <Route path="*" component={Home} />
 

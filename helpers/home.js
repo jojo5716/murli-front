@@ -3,8 +3,8 @@ import moment from 'moment';
 
 function bookingsToJSON(bookings) {
     return _.forEach(bookings, (booking) => {
-        console.log(booking.rooms);
-        const rooms = booking.rooms ? booking.rooms.replace(/&quot;/g,'"') : null;
+        const bookingRooms = booking.rooms || '';
+        const rooms = bookingRooms ? bookingRooms.replace(/&quot;/g, '"') : null;
         booking.rooms = JSON.parse(rooms);
     });
 }
@@ -14,7 +14,6 @@ export function usersWithBookings(navigationPages) {
 
     const rooms = _.filter(navigationPages, (navPage) => {
         if (navPage.user.bookings.length > 0) {
-
             const bookings = _.filter(navPage.user.bookings, (booking) => {
                 if (booking.bookingStatus === 'CONF' && !(bookingsRegistered.includes(booking.bookingCode))) {
                     bookingsRegistered.push(booking.bookingCode);
@@ -26,14 +25,11 @@ export function usersWithBookings(navigationPages) {
                 navPage.user.bookings = bookingsToJSON(bookings);
                 return navPage;
             }
-
         }
     });
 
     return rooms;
 }
-
-
 
 function saveBookingMetric(metric, key, total, bookings) {
     if (!bookings[metric][key]) {

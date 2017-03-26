@@ -27,7 +27,7 @@ export default class Menu extends React.Component {
                     </li>
                     <li>
                         <a href="javascript:void(0);">
-                            <span className="badge badge-danger">2</span>
+                            <span className="badge badge-danger">3</span>
                             <span className="gcon gcon-browser rs-icon-menu"/>
                             Devices
                         </a>
@@ -40,6 +40,10 @@ export default class Menu extends React.Component {
                                 <NavLink to="/devices/per-pages">
                                     <span className="icon-chart-pie rs-icon-menu"/>
                                      Devices per page
+                                </NavLink>
+                                <NavLink to="/devices/spankey">
+                                    <span className="icon-chart-pie rs-icon-menu"/>
+                                     Availability to booking
                                 </NavLink>
                             </li>
                         </ul>
