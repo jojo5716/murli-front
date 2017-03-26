@@ -3,6 +3,7 @@ import moment from 'moment';
 
 function bookingsToJSON(bookings) {
     return _.forEach(bookings, (booking) => {
+        console.log(booking.rooms);
         const rooms = booking.rooms ? booking.rooms.replace(/&quot;/g,'"') : null;
         booking.rooms = JSON.parse(rooms);
     });
@@ -67,7 +68,6 @@ export function formatBookings(navPages) {
                     const createAt = moment(navPage.user.createAt).format('YYYY-MM-DD');
                     bookings.totalAmount += total;
                     bookings.totalRooms += 1;
-                    // saveRoom(room, bookings);
                     saveBookingMetric('rooms', room.roomCode, total, bookings);
                     saveBookingMetric('boards', room.boardCode, total, bookings);
                     saveBookingMetric('rates', room.rateCode, total, bookings);

@@ -5,7 +5,6 @@ import reducers from '../../../reducers/';
 import {
     generateColorsToPie,
     devicePercentTraffic,
-    groupPagesByDevices,
     getVisitFromPages,
     getOSNameFromPages
 } from '../../../helpers/devices';

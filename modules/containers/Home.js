@@ -16,8 +16,6 @@ import GoogleChart from '../components/charts/GoogleChart';
 import BoxContent from '../components/BoxContent';
 import Alert from '../components/Alert';
 import Collapser from '../components/Collapser';
-import Table from '../components/Table';
-
 
 class Home extends React.Component {
 
@@ -174,7 +172,8 @@ class Home extends React.Component {
         _.forEach(bookingUsers, (page) => {
             _.forEach(page.user.bookings, (booking) => {
                 const rooms = roomsTable(booking);
-                const titleCollapser = `${booking.bookingCode} - ${booking.bookingStatus}`
+                const titleCollapser = `${booking.bookingCode} - ${booking.bookingStatus}`;
+
                 html.push(
                     <Collapser title={titleCollapser}>
                         <table className="table rs-table table-striped table-hover table-b-t">

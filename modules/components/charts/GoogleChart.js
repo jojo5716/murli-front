@@ -8,7 +8,7 @@ export default class GoogleChart extends Component {
         const options = {
             title: this.props.titleChart,
             hAxis: { title: this.props.hAxis },
-            vAxis: { title: this.props.hvAxis },
+            vAxis: { title: this.props.hAxis },
             legend: 'none'
         };
 

@@ -1,59 +1,124 @@
+import _ from 'lodash';
+import { getUserAgentInfo } from './devices';
+
 
 export function groupBySections(navigationPages, resolve) {
-    const pagesData = {
-        availability: { urls: {}, total: 0, previousURL: {} },
-        availabilityDestination: { urls: {}, total: 0, previousURL: {} },
-        content: { urls: {}, total: 0, previousURL: {} },
-        noAvailability: { urls: {}, total: 0, previousURL: {} },
-        booking: { urls: {}, total: 0, previousURL: {} }
-    };
+    const devicesPages = {};
+    const bookings = [];
 
-    for (let navigationIndex = 0; navigationIndex < navigationPages.length; navigationIndex += 1) {
-        const pages = navigationPages[navigationIndex].pages;
+    _.forEach(navigationPages, (navPage) => {
+        const userAgent = getUserAgentInfo(navPage.user.dataUser.userAgent);
 
-        for (let i = 0; i < pages.length; i += 1) {
-            // Each page data
-            groupBySection(pages[i], pagesData);
-        }
-    }
+        const browserName = userAgent.browser.name;
+        const osName = userAgent.os.name;
+        const osVersion = userAgent.os.version;
 
-    resolve(pagesData);
+        initializeDeviceTree(userAgent, devicesPages);
+        _.forEach(navPage.pages, (page) => {
+            const deviceTree = devicesPages[browserName][osName][osVersion];
+            const section = detectSectionForURL(page.url);
+
+            if (section === 'booking') {
+                _.forEach(navPage.user.bookings, (booking) => {
+                    if (booking.bookingStatus === 'CONF') {
+                        if (!bookings.includes(booking.bookingCode)) {
+                            groupBySection(page.url, section, deviceTree);
+                        }
+                        bookings.push(booking.bookingCode);
+                    }
+                });
+            } else {
+                groupBySection(page.url, section, deviceTree);
+            }
+        });
+    });
+
+    resolve(devicesPages);
 }
 
-function groupBySection(page, pagesData) {
+function initializeDeviceTree(userAgent, devicesPages) {
+    const browserName = userAgent.browser.name;
+    const osName = userAgent.os.name;
+    const osVersion = userAgent.os.version;
 
-    const pagesDataCloned = Object.assign({}, pagesData);
-    const url = page.url;
-    const previousURL = page.previousURL;
-
-    const isAvailability = url.indexOf('bookcore/availability/rooms') !== -1;
-    const isAvailabilityDestination = url.indexOf('availability/hotels') !== -1;
-    const isNonAvailability = url.indexOf('bookcore/no-availability') !== -1;
-    const isBookingComplete = url.indexOf('booking/confirmation') !== -1;
-
-    let sectionName = 'content';
-
-    if (isAvailability) {
-        sectionName = 'availability';
-    } else if (isAvailabilityDestination) {
-        sectionName = 'availabilityDestination';
-    } else if (isNonAvailability) {
-        sectionName = 'noAvailability';
-    } else if (isBookingComplete) {
-        sectionName = 'booking';
+    if (!devicesPages[browserName]) {
+        devicesPages[browserName] = {};
     }
 
-    if (!pagesDataCloned[sectionName].urls[url]) {
-        pagesDataCloned[sectionName].urls[url] = 0;
+    if (!devicesPages[browserName][osName]) {
+        devicesPages[browserName][osName] = {};
     }
 
-    if (!pagesDataCloned[sectionName].previousURL[previousURL]) {
-        pagesDataCloned[sectionName].previousURL[previousURL] = 0;
+    if (!devicesPages[browserName][osName][osVersion]) {
+        devicesPages[browserName][osName][osVersion] = {};
+    }
+}
+
+function detectSectionForURL(url) {
+    const sections = {
+        availability: 'bookcore/availability/rooms',
+        availabilityDestination: 'availability/hotels',
+        noAvailability: 'bookcore/no-availability',
+        booking: 'booking/confirmation'
+    };
+
+    let urlSection = 'content';
+
+    Object.keys(sections).map((section) => {
+        if (url.indexOf(sections[section]) !== -1) {
+            urlSection = section;
+        }
+    });
+
+    return urlSection;
+}
+
+
+function groupBySection(url, section, devicesPages) {
+
+    if (!devicesPages[section]) {
+        devicesPages[section] = {};
     }
 
-    pagesDataCloned[sectionName].urls[url] += 1;
-    pagesDataCloned[sectionName].total += 1;
-    pagesDataCloned[sectionName].previousURL[previousURL] += 1;
+    if (!devicesPages[section][url]) {
+        devicesPages[section][url] = 0;
+    }
 
-    return pagesDataCloned;
+    devicesPages[section][url] += 1;
+
+    return devicesPages;
+}
+
+
+export function getSectionsVisits(devicesPages) {
+    const sections = {
+        content: { devices: {}, total: 0 },
+        availability: { devices: {}, total: 0 },
+        noAvailability: { devices: {}, total: 0 },
+        booking: { devices: {}, total: 0 }
+    };
+
+    _.forEach(Object.keys(devicesPages), (device) => {
+       _.forEach(Object.keys(devicesPages[device]), (os) => {
+           _.forEach(Object.keys(devicesPages[device][os]), (version) => {
+               _.forEach(Object.keys(devicesPages[device][os][version]), (section) => {
+                   if (!sections[section].devices[device]) {
+                       sections[section].devices[device] = {};
+                   }
+
+                   if (!sections[section].devices[device][os]) {
+                       sections[section].devices[device][os] = 0;
+                   }
+
+                   const sectionsDevice = devicesPages[device][os][version][section];
+                   const totalURLVisits = Object.values(sectionsDevice).reduce((a, b) => a + b, 0);
+                   sections[section].total += totalURLVisits;
+                   sections[section].devices[device][os] += totalURLVisits;
+               });
+           });
+       });
+    });
+
+    return sections;
+
 }

@@ -1,12 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Tabs from 'react-simpletabs';
+import 'react-simpletabs/dist/react-simpletabs.min.css';
 import reducers from '../../../reducers/';
 import BoxChart from '../../components/BoxChart';
+import BoxContent from '../../components/BoxContent';
 
-import { groupBySections } from '../../../helpers/pages';
 import { formatDevicesPagesIfNeeded } from '../../../actions/';
+import { getSectionsVisits } from '../../../helpers/pages';
 import Loader from '../../components/Loader';
 import EmptyData from '../../components/EmptyData';
+import GoogleChart from '../../components/charts/GoogleChart';
+
 
 class PerPagesDevice extends React.Component {
 
@@ -25,59 +30,141 @@ class PerPagesDevice extends React.Component {
         }
     }
 
-    renderPage(pages) {
-        console.log(pages);
-        console.log("========")
+    renderTabs(totalPerSection) {
+        return (
+            <Tabs>
+                <Tabs.Panel title='Availability pages'>
+                    { this.renderAvailabilityDetailPages(totalPerSection.availability) }
+                </Tabs.Panel>
+                <Tabs.Panel title='Content pages'>
+                    { this.renderAvailabilityDetailPages(totalPerSection.content) }
+                </Tabs.Panel>
+                <Tabs.Panel title='Non availability pages'>
+                    { this.renderAvailabilityDetailPages(totalPerSection.noAvailability) }
+                </Tabs.Panel>
+                <Tabs.Panel title='Booking pages'>
+                    { this.renderAvailabilityDetailPages(totalPerSection.booking) }
+                </Tabs.Panel>
+            </Tabs>
+        );
+    }
 
-        const totalAvailability = pages.availabilityDestination.total + pages.availability.total;
-        const totalPagesVisited = totalAvailability + pages.content.total + pages.noAvailability.total;
+    renderChartDevices(device, devices) {
+        const header = [['Device', 'Visits']];
 
-        const totalConversionPages = pages.availability.total + pages.content.total;
-        const conversionBooking = ((pages.booking.total * 100) / totalConversionPages) * 10 || 0;
+       _.forEach(Object.keys(devices), (os) => {
+           header.push([os, devices[os]]);
+       });
 
-        const percentContentVisited = ((pages.content.total * 100) / totalPagesVisited) || 0;
-        const percentAvailabilityVisited = ((pages.availability.total * 100) / totalPagesVisited) || 0;
-        const percentNonAvailabilityVisited = ((pages.noAvailability.total * 100) / totalPagesVisited) || 0;
+        return (
+            <GoogleChart
+                data={header}
+                hAxis={device}
+                chartType="ColumnChart"
+                titleChart={device}
+            />
+        );
+    }
+
+    renderAvailabilityDetailPages(devices) {
+        return (
+            <div className="row">
+                <div className="col-md-12">
+                    { (Object.keys(devices.devices).map((device) => {
+                        return (
+                            <div className="col-md-4">
+                                <BoxContent title={device} subtitle="Pages per section">
+                                    {this.renderChartDevices(device, devices.devices[device])}
+                                </BoxContent>
+                            </div>
+                        );
+                    }))}
+                </div>
+            </div>
+        );
+    }
+
+    renderContentDetailPages2() {
+        const urls = this.props.devicesPagesData.content.urls;
+
+        return (
+            <table className="table rs-table table-striped table-hover table-b-t">
+                <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>Nº visits</th>
+                </tr>
+                </thead>
+                <tbody>
+                {Object.keys(urls).map((url, index) =>
+                    <tr key={index}>
+                        <td>{url}</td>
+                        <td>{urls[url]}</td>
+                    </tr>
+                )}
+                </tbody>
+            </table>
+        );
+    }
+
+    renderHeader(totalPerSection) {
+        const totalAllSections = Object.values(totalPerSection).reduce((a, b) => a + b.total, 0);
+        const availabilityPercent = (totalPerSection.availability.total * 100) / totalAllSections;
+        const noAvailabilityPercent = (totalPerSection.noAvailability.total * 100) / totalAllSections;
+        const contentPercent = (totalPerSection.content.total * 100) / totalAllSections;
+        const bookingPercent = (totalPerSection.booking.total * 100) / totalAllSections;
+
+        return (
+            <div className="col-lg-12">
+                <div className="col-md-3">
+                    <BoxChart
+                        content={totalPerSection.availability.total}
+                        title="All availability pages"
+                        percent={availabilityPercent.toFixed(2)}
+                        type="red"
+                    />
+                </div>
+                <div className="col-md-3">
+                    <BoxChart
+                        content={totalPerSection.noAvailability.total}
+                        title="All no availability pages"
+                        percent={noAvailabilityPercent.toFixed(2)}
+                        type="red"
+                    />
+                </div>
+                <div className="col-md-3">
+                    <BoxChart
+                        content={totalPerSection.content.total}
+                        title="All content pages"
+                        percent={contentPercent.toFixed(2)}
+                        type="red"
+                    />
+                </div>
+                <div className="col-md-3">
+                    <BoxChart
+                        content={totalPerSection.booking.total}
+                        title="All booking confirmation"
+                        percent={bookingPercent.toFixed(2)}
+                        type={totalPerSection.booking ? 'green' : 'red'}
+                        textContent="Bookings"
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    renderPage() {
+        const totalPerSection = getSectionsVisits(this.props.devicesPagesData);
 
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-lg-12">
-                        <div className="col-md-3">
-                            <BoxChart
-                                content={totalAvailability}
-                                title="All availability"
-                                percent={percentAvailabilityVisited.toFixed(2)}
-                                type="red"
-                            />
-                        </div>
+                    { this.renderHeader(totalPerSection) }
+                    <div className="col-md-12">
+                        <BoxContent title="Detail pages" subtitle="Pages per section">
+                            {this.renderTabs(totalPerSection)}
+                        </BoxContent>
 
-                        <div className="col-md-3">
-                            <BoxChart
-                                content={pages.content.total}
-                                title="All content pages"
-                                percent={percentContentVisited.toFixed(2)}
-                                type="red"
-                            />
-                        </div>
-
-                        <div className="col-md-3">
-                            <BoxChart
-                                content={pages.noAvailability.total}
-                                title="All non-availability"
-                                percent={percentNonAvailabilityVisited.toFixed(2)}
-                                type="red"
-                            />
-                        </div>
-
-                        <div className="col-md-3">
-                            <BoxChart
-                                content={pages.booking.total}
-                                title="% Conversion"
-                                percent={conversionBooking.toFixed(2)}
-                                type="green"
-                            />
-                        </div>
                     </div>
                 </div>
             </div>
@@ -87,13 +174,14 @@ class PerPagesDevice extends React.Component {
     render() {
         const loading = this.props.loadingComponents;
         const pagesData = this.props.devicesPagesData;
+        const havePagesData = Object.keys(pagesData).length > 0;
 
         if (loading) {
             return <Loader/>;
         }
 
-        if (this.props.navigationPages.length > 0) {
-            return this.renderPage(pagesData);
+        if (this.props.navigationPages.length > 0 && havePagesData) {
+            return this.renderPage();
         }
 
         return (
