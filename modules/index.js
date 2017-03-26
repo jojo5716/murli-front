@@ -21,7 +21,7 @@ class App extends React.Component {
 
     renderProjectNotFound() {
         return (
-            <EmptyData title="Without project" message="Please select a project"/>
+            <EmptyData title="No project found" message="Please select a project"/>
         );
     }
 
