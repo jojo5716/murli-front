@@ -4,8 +4,13 @@ import moment from 'moment';
 function bookingsToJSON(bookings) {
     return _.forEach(bookings, (booking) => {
         const bookingRooms = booking.rooms || '';
-        const rooms = bookingRooms ? bookingRooms.replace(/&quot;/g, '"') : null;
-        booking.rooms = JSON.parse(rooms);
+
+        try {
+            const rooms = bookingRooms ? bookingRooms.replace(/&quot;/g, '"') : null;
+            booking.rooms = JSON.parse(rooms);
+        } catch (err) {
+            console.log(err);
+        }
     });
 }
 

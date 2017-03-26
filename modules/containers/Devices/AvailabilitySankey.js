@@ -25,14 +25,15 @@ export default class AvailabilitySankey extends Component {
             height: 400,
             gutter: 15,
             rectWidth: 10,
-            nodeaccessor: function(x) { return x.id; }
+            nodeaccessor: x => x.id
         });
 
+        let displayElement = 2;
         const curvedRectangles = sankey.curvedRectangles.map((r, i) => {
             return (
                 <g>
-                    <path d={ r.curve.path.print() } fill="#acd1e9" style={{ opacity: this.opacity(i, 1) }}
-                      onMouseEnter={ () => { console.log(r); }} />
+                    <path d={ r.curve.path.print() } fill="#acd1e9" style={{ opacity: this.opacity(i, displayElement) }}
+                      onMouseEnter={ () => { displayElement = r.index; }} />
                 </g>
             );
         });
@@ -60,7 +61,9 @@ export default class AvailabilitySankey extends Component {
         const centerStyle = { textAlign: 'center' };
         return (
             <div style={centerStyle}>
-                <BoxContent title="Availability to booking" subtitle="Diagram Availability vs No availability to booking or exit">
+                <BoxContent
+                    title="Availability to booking"
+                    subtitle="Diagram Availability vs No availability to booking or exit">
                     <div className="row">
                         <div className="col-md-6">
                             <svg width={ 500 } height={ 400 }>

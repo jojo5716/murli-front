@@ -36,7 +36,7 @@ jQuery(document).ready(function($){
     // Back to top
     // ===========
     var backTopEle = '<div class="back-to-top bg-dark b-r-a">' +
-        '<span class="glyphicon glyphicon-chevron-up"></span>' +
+        '<i class="fa fa-chevron-up" aria-hidden="true"></i>' +
         '</div>';
     $('body').append(backTopEle);
 
