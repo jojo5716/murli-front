@@ -29,6 +29,12 @@ export function analytics(state = initialState.analytics, action = {}) {
                 reports: action.payload.reports
             });
 
+        case actions.ANALYTICS_REPORT_DATA:
+        console.log(action.payload)
+            return Object.assign({}, state, {
+                reportData: action.payload.reportData
+            });
+
         default:
             return state;
     }

@@ -37,6 +37,26 @@ function loadReports(reports) {
     };
 }
 
+function fetchingData() {
+    return {
+        type: actions.ANALYTICS_IS_FETCHING
+    };
+}
+
+function fetchingDataComplete() {
+    return {
+        type: actions.ANALYTICS_IS_FETCHING_DONE
+    };
+}
+
+function saveDataFromReport(data) {
+    return {
+        type: actions.ANALYTICS_REPORT_DATA,
+        payload: {
+            reportData: data
+        }
+    };
+}
 
 // Actions
 
@@ -111,6 +131,17 @@ const retreiveReportsIfNeeded = () => (dispatch, getState) => {
     }
 };
 
+const getDataFromAPI = (state) => (dispatch) => {
+    if (state.getProjects.projectSelected) {
+        dispatch(fetchingData());
+
+    }
+};
+
+
+const retreiveDataFromAPI = (data) => (dispatch, getState) => {
+    return dispatch(getDataFromAPI());
+};
 
 //  Analytics data
 
@@ -122,5 +153,9 @@ module.exports = {
     retrievingReports,
     retrievedReports,
     loadReports,
-    retreiveReportsIfNeeded
+    retreiveReportsIfNeeded,
+    fetchingData,
+    fetchingDataComplete,
+    retreiveDataFromAPI,
+    saveDataFromReport
 };

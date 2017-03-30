@@ -2,7 +2,15 @@ import { changeCheckIn, changeCheckOut } from './dates';
 import { changeProjectSelected, fetchAllProjectsIfNeeded } from './project';
 import { fetchPagesIfNeeded, formatDevicesIfNeeded, formatDevicesPagesIfNeeded, loadingDevices } from './devices';
 import { loadingComponents, loadedComponents } from './components';
-import { creatingReport, createdReport, createReportIfNeeded, retreiveReports, retreiveReportsIfNeeded } from './analytics';
+import {
+    creatingReport,
+    createdReport,
+    createReportIfNeeded,
+    retreiveReports,
+    retreiveReportsIfNeeded,
+    retreiveDataFromAPI,
+    saveDataFromReport
+} from './analytics';
 
 
 module.exports = {
@@ -29,5 +37,7 @@ module.exports = {
     createdReport,
     createReportIfNeeded,
     retreiveReports,
-    retreiveReportsIfNeeded
+    retreiveReportsIfNeeded,
+    retreiveDataFromAPI,
+    saveDataFromReport
 };

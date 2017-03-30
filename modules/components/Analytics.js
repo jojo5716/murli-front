@@ -31,7 +31,7 @@ export default class Analytics extends Component {
                         ],
                         metrics: this.props.metrics,
                         dimensions: this.props.dimensions,
-                        filtersExpression: "ga:pagepath=~availability"
+                        filtersExpression: 'ga:pagepath=~availability'
                     }
                 ]
             }

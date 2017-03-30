@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import reducers from '../../../reducers/';
-import { retreiveReportsIfNeeded } from '../../../actions/';
+import { retreiveReportsIfNeeded, saveDataFromReport } from '../../../actions/';
 import Loader from '../../components/Loader';
 import Analytics from '../../components/Analytics';
 import Alert from '../../components/Alert';
-import { formatMetrics, formatDimensions } from '../../../helpers/analytics';
+import { formatMetrics, formatDimensions, overviewData } from '../../../helpers/analytics';
+import BoxContent from '../../components/BoxContent';
 
 class ViewReport extends Component {
 
@@ -21,6 +22,7 @@ class ViewReport extends Component {
 
     onSuccess(response) {
         console.log(response);
+        this.props.dispatch(saveDataFromReport(response));
     }
 
     onFailure() {
@@ -28,13 +30,13 @@ class ViewReport extends Component {
     }
 
     getReport() {
-        const report = _.find(this.props.reports, (reportObj) =>
+        const report = _.find(this.props.reports, reportObj =>
             reportObj._id === this.props.reportID
         );
 
         return report;
     }
-    
+
     renderPage() {
         const clientID = '84342547';
         const report = this.getReport();
@@ -44,6 +46,7 @@ class ViewReport extends Component {
                 <div className="col-md-6">
                     <Analytics
                         clientID={clientID}
+                        dispatch={this.props.dispatch}
                         metrics={formatMetrics('expression', report.metrics)}
                         dimensions={formatDimensions('name', report.dimensions)}
                         startDate={this.props.checkIn}
@@ -60,6 +63,49 @@ class ViewReport extends Component {
 
     }
 
+    renderGlobalData() {
+        const overview = overviewData(this.props.reportData);
+
+        return (
+            <BoxContent title='Overview of information' subtitle='Analytics report' >
+                <table className="table table-b-t">
+                    <thead>
+                        <tr>
+                            <th>Total</th>
+                            <th>Rows</th>
+                            <th>Maximums</th>
+                            <th>Mimimums</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{overview.total}</td>
+                            <td>{overview.rows}</td>
+                            <td>{overview.maximums}</td>
+                            <td>{overview.minimums}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </BoxContent>
+        );
+    }
+
+    reportData() {
+        return (
+            <div className="col-md-12">
+                <div className="col-md-8">
+                    <BoxContent title='Detail information' subtitle='Analytics report' >
+
+                    </BoxContent>
+                </div>
+
+                <div className="col-md-4">
+                    {this.renderGlobalData()}
+                </div>
+            </div>
+        );
+    }
+
     render() {
         const loading = this.props.loadingComponents;
 
@@ -67,7 +113,12 @@ class ViewReport extends Component {
             return <Loader />;
         }
 
-        return this.renderPage();
+        if (Object.keys(this.props.reportData).length === 0) {
+            return this.renderPage();
+        }
+
+        return this.reportData();
+
     }
 }
 
@@ -78,6 +129,7 @@ const mapStateToProps = (state, ownProps) => {
         checkOut: reducers(state).getDates.checkOut,
         loadingComponents: reducers(state).components.loading,
         reports: reducers(state).analytics.reports,
+        reportData: reducers(state).analytics.reportData,
         reportID: ownProps.params.report
 
     };

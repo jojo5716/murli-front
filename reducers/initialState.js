@@ -19,6 +19,7 @@ export default {
     analytics: {
         isCreatingReport: false,
         isFetching: false,
-        reports: []
+        reports: [],
+        reportData: {}
     }
 };
