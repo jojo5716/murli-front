@@ -1,58 +1,66 @@
 <!doctype html public="storage">
 <html lang=en>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <title>Murli analytics</title>
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Jonathan Rodríguez Alejos">
+    <meta name="google-signin-client_id" content="787981775604-a6jtr6jcd9uql34uftaf36kt6sqd7fop.apps.googleusercontent.com">
+    <meta name="google-signin-scope" content="https://www.googleapis.com/auth/analytics.readonly">
+    <title>Murli analytics</title>
 
-        <!-- Framework -->
-        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
 
-        <!-- Icon Fonts -->
-        <link rel="stylesheet" href="/css/entypo.min.css">
-        <link rel="stylesheet" href="/css/font-awesome.min.css">
-        <link rel="stylesheet" href="/css/flag-icon.min.css">
-        <link rel="stylesheet" href="/css/material-icon.min.css">
+    <!-- Framework -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 
-        <!-- Plugins -->
-        <link rel="stylesheet" href="/css/plugins.css">
+    <!-- Icon Fonts -->
+    <link rel="stylesheet" href="/css/entypo.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/flag-icon.min.css">
+    <link rel="stylesheet" href="/css/material-icon.min.css">
 
-        <!-- Main Template CSS -->
-        <link rel="stylesheet" href="/css/bootstrap.custom.css">
-        <link rel="stylesheet" href="/css/style.css">
-        <link rel="stylesheet" href="/css/helper.css">
-    </head>
+    <!-- Plugins -->
+    <link rel="stylesheet" href="/css/plugins.css">
 
-    <body>
-        <div id="rs-wrapper">
-            <div id="app"></div>
-        </div>
+    <!-- Main Template CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.custom.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/helper.css">
+</head>
 
-        <!-- Screen overlay is required -->
-        <div id="rs-screen-overlay"></div>
+<body>
+    <div id="rs-wrapper">
+        <div id="app"></div>
+    </div>
 
-        <script src="https://apis.google.com/js/client:platform.js"></script>
-        <script src="/js/vendor.js"></script>
-        <script src="/js/plugins.js"></script>
+    <!-- Screen overlay is required -->
+    <div id="rs-screen-overlay"></div>
 
-        <!-- Template Js -->
-        <script src="/js/app.js"></script>
-        <script src="/js/layout-default.js"></script>
-        <script src="/bundle.js"></script>
-        <script src="/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://apis.google.com/js/client:platform.js"></script>
 
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('.rs-datepicker').datepicker().on('changeDate', function (ev) {
+    <script type="text/javascript">
+        console.log(gapi.client)
+    </script>
+    <script src="/js/vendor.js"></script>
+    <script src="/js/plugins.js"></script>
 
-                });
+    <!-- Template Js -->
+    <script src="/js/app.js"></script>
+    <script src="/js/layout-default.js"></script>
+    <script src="/bundle.js"></script>
+    <script src="/js/bootstrap-datepicker.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.rs-datepicker').datepicker().on('changeDate', function (ev) {
+
             });
-        </script>
-    </body>
+        });
+    </script>
+</body>
+
 </html>

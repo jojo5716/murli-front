@@ -24,9 +24,9 @@ export function analytics(state = initialState.analytics, action = {}) {
                 isFetching: false
             });
 
-        case actions.ANALYTICS_REPORT_DATA:
+        case actions.ANALYTICS_LOAD_REPORTS:
             return Object.assign({}, state, {
-                reports: action.payload.reportData
+                reports: action.payload.reports
             });
 
         default:

@@ -17,6 +17,7 @@ import AvailabilitySankey from './modules/containers/Devices/AvailabilitySankey'
 // Analytics
 import Dashboard from './modules/containers/Analytics/Dashboard';
 import CreateReport from './modules/containers/Analytics/CreateReport';
+import ViewReport from './modules/containers/Analytics/ViewReport';
 
 import reducers from './reducers';
 
@@ -44,6 +45,7 @@ render((
 
                 <Route path="/analytics/dashboard" component={Dashboard} />
                 <Route path="/analytics/new/report" component={CreateReport} />
+                <Route path="/analytics/report/:report" component={ViewReport} />
 
                 <Route path="*" component={Home} />
 

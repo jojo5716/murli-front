@@ -18,11 +18,52 @@ function createdReport() {
     };
 }
 
+function retrievingReports() {
+    return {
+        type: actions.ANALYTICS_RETRIEVING_REPORTS
+    };
+}
+
+function retrievedReports() {
+    return {
+        type: actions.ANALYTICS_RETREIVED_REPORTS
+    };
+}
+
+function loadReports(reports) {
+    return {
+        type: actions.ANALYTICS_LOAD_REPORTS,
+        payload: reports
+    };
+}
+
 
 // Actions
 
-
 // Analytics data
+
+const retreiveReports = () => (dispatch, getState) => {
+    const state = getState();
+    const url = replaceParams(apiURL.getReports, [state.getProjects.projectSelected]);
+    dispatch(retrievingReports());
+
+    return fetch(url, {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+    })
+        .then(response => response.json())
+        .then((response) => {
+            dispatch(retrievedReports());
+            dispatch(loadReports(response));
+        })
+        .catch(err => { console.log(err); });
+
+
+};
+
 const shouldcreateReport = (state) => {
     let shouldFetch = true;
 
@@ -46,6 +87,7 @@ const createReport = (reportData, state) => (dispatch) => {
             .then((response) => {
                 if (response.success) {
                     dispatch(loadedComponents());
+                    dispatch(retreiveReports());
                 }
             })
             .catch(err => { console.log(err); });
@@ -60,11 +102,25 @@ const createReportIfNeeded = reportData => (dispatch, getState) => {
         return dispatch(createReport(reportData, state));
     }
 };
+
+const retreiveReportsIfNeeded = () => (dispatch, getState) => {
+    const state = getState();
+
+    if (shouldcreateReport(state)) {
+        return dispatch(retreiveReports());
+    }
+};
+
+
 //  Analytics data
 
 
 module.exports = {
     creatingReport,
     createdReport,
-    createReportIfNeeded
+    createReportIfNeeded,
+    retrievingReports,
+    retrievedReports,
+    loadReports,
+    retreiveReportsIfNeeded
 };

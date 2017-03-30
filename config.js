@@ -11,5 +11,6 @@ export const apiURL = {
     getAllPages: `${url}/pages`,
     getPagesByDate: `${url}/pages/createAt/{0}/{1}/{2}`,
     getProjects: `${url}/projects`,
-    createReport: `${url}/analytics/new/report/{0}`
+    createReport: `${url}/analytics/new/report/{0}`,
+    getReports: `${url}/analytics/reports/{0}`
 };
