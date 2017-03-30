@@ -15,12 +15,12 @@ export default class Menu extends React.Component {
 
                     </li>
 
-                    <li className="menu-block-divider"/>
+                    <li className="menu-block-divider" />
                     <li className="menu-header">Main menu</li>
 
                     <li>
                         <NavLink to="/" onlyActiveOnIndex>
-                            <span className="icon-home rs-icon-menu"/>
+                            <span className="icon-home rs-icon-menu" />
                             Dashboard
                         </NavLink>
 
@@ -28,22 +28,44 @@ export default class Menu extends React.Component {
                     <li>
                         <a href="javascript:void(0);">
                             <span className="badge badge-danger">3</span>
-                            <span className="gcon gcon-browser rs-icon-menu"/>
+                            <span className="gcon gcon-browser rs-icon-menu" />
                             Devices
                         </a>
                         <ul>
                             <li>
                                 <NavLink to="/devices/dashboard">
-                                    <span className="icon-chart-pie rs-icon-menu"/>
-                                     Devices on all pages
+                                    <span className="icon-chart-pie rs-icon-menu" />
+                                    Devices on all pages
                                 </NavLink>
                                 <NavLink to="/devices/per-pages">
-                                    <span className="icon-chart-pie rs-icon-menu"/>
-                                     Devices per page
+                                    <span className="icon-chart-pie rs-icon-menu" />
+                                    Devices per page
                                 </NavLink>
                                 <NavLink to="/devices/spankey">
-                                    <span className="icon-chart-pie rs-icon-menu"/>
-                                     Availability to booking
+                                    <span className="icon-chart-pie rs-icon-menu" />
+                                    Availability to booking
+                                </NavLink>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="javascript:void(0);">
+                            <span className="badge badge-danger">2</span>
+                            <span className="gcon gcon-browser rs-icon-menu" />
+                            Analytics
+                        </a>
+                        <ul>
+                            <li>
+                                <NavLink to="/analytics/dashboard">
+                                    <span className="icon-chart-pie rs-icon-menu" />
+                                    Dashboard
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/analytics/new/report">
+                                    <span className="icon-chart-pie rs-icon-menu" />
+                                    Create report
                                 </NavLink>
                             </li>
                         </ul>

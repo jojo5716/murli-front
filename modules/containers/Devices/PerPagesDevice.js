@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import Tabs from 'react-simpletabs';
 import 'react-simpletabs/dist/react-simpletabs.min.css';
@@ -52,9 +53,9 @@ class PerPagesDevice extends React.Component {
     renderChartDevices(device, devices) {
         const header = [['Device', 'Visits']];
 
-       _.forEach(Object.keys(devices), (os) => {
-           header.push([os, devices[os]]);
-       });
+        _.forEach(Object.keys(devices), (os) => {
+            header.push([os, devices[os]]);
+        });
 
         return (
             <GoogleChart

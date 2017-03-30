@@ -15,5 +15,10 @@ export default {
     },
     projects: [],
     projectSelected: null,
-    navigationPages: []
+    navigationPages: [],
+    analytics: {
+        isCreatingReport: false,
+        isFetching: false,
+        reports: {}
+    }
 };
