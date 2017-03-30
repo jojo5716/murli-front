@@ -33,7 +33,9 @@ function retrievedReports() {
 function loadReports(reports) {
     return {
         type: actions.ANALYTICS_LOAD_REPORTS,
-        payload: reports
+        payload: {
+            reports: reports.reportsProject
+        }
     };
 }
 

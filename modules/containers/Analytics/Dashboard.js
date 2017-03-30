@@ -17,6 +17,7 @@ class Dashboard extends Component {
     }
 
     renderPage() {
+        console.log(this.props.reports)
         return (
             <div className="col-md-6">
                 {this.props.reports.map(this.renderReport.bind(this))}
@@ -37,7 +38,7 @@ class Dashboard extends Component {
                         <ul className="list-inline m-a-0">
                             <li>
                                 <NavLink to={url}>
-                                    <span className="fa fa-newspaper-o"></span>
+                                    <span className="fa fa-newspaper-o"/>
                                     Go to report
                                 </NavLink>
                             </li>

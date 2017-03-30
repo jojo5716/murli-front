@@ -90,19 +90,83 @@ class ViewReport extends Component {
         );
     }
 
+    renderDetailReport() {
+        const data = this.props.reportData;
+        const rows = data.result.reports[0].data.rows;
+
+        return (
+            <table className="table table-b-t">
+                <thead>
+                <tr>
+                    {this.renderHeaderDetail()}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {rows.map((row, index) =>
+                        <tr key={index}>
+                            {this.renderDetailData(row)}
+                        </tr>
+                    )}
+                </tr>
+                </tbody>
+            </table>
+        );
+    }
+
+    renderDetailData(row) {
+        const html = [];
+
+       _.forEach(row.dimensions, (dimension) => {
+           html.push(
+                <td>{dimension}</td>
+            );
+       });
+
+       _.forEach(row.metrics[0].values, (metric) => {
+           html.push(
+                <td>{metric}</td>
+            );
+       });
+
+        return html;
+    }
+
+    renderHeaderDetail() {
+        const html = [];
+        const data = this.props.reportData;
+        const report = data.result.reports[0];
+        const dimensions = report.columnHeader.dimensions;
+
+        _.forEach(dimensions, (dimension) => {
+            html.push(
+                <th>{dimension}</th>
+            );
+        });
+
+        const metrics = report.columnHeader.metricHeader.metricHeaderEntries;
+        _.forEach(metrics, (metric) => {
+            html.push(
+                <th>{metric.name} ({metric.type})</th>
+            );
+        });
+
+        return html;
+    }
+
     reportData() {
         return (
-            <div className="col-md-12">
-                <div className="col-md-8">
-                    <BoxContent title='Detail information' subtitle='Analytics report' >
-
-                    </BoxContent>
-                </div>
-
-                <div className="col-md-4">
-                    {this.renderGlobalData()}
-                </div>
+        <div className="col-md-12">
+            <div className="col-md-8">
+                <BoxContent title='Detail information' subtitle='Analytics report' >
+                    {this.renderDetailReport()}
+                </BoxContent>
             </div>
+
+            <div className="col-md-4">
+                {this.renderGlobalData()}
+            </div>
+        </div>
         );
     }
 
