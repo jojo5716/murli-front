@@ -93,15 +93,16 @@ export function getChartData(metricsName, data) {
     const charts = {};
     Object.keys(data).map((dimensionName) => { // ga:country
         Object.keys(data[dimensionName]).map((dimension) => { // (not set)
+            if (!charts[dimensionName]) {
+                charts[dimensionName] = {};// ga:country
+            }
+
             metricsName.map((metric) => {
-                debugger;
-
-                charts[dimensionName] = [];// ga:country
-
-                Object.keys(data[dimensionName]).map((dimension) => {
-                    // Country
-                    charts[metric].push(data[dimensionName][dimension][metric]);
-                });
+                // Country
+                if (!charts[dimensionName][metric]) {
+                    charts[dimensionName][metric] = [];
+                }
+                charts[dimensionName][metric].push(data[dimensionName][dimension][metric]);
             });
         });
 
