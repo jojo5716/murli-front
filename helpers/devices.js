@@ -1,4 +1,4 @@
-import parser  from 'user-agent-parser';
+import parser from 'user-agent-parser';
 
 import { generateColor } from './utils';
 
@@ -13,12 +13,12 @@ export function generateColorsToPie(length) {
 }
 
 export function getUserAgentInfo(userAgent) {
-    return  parser(userAgent);
+    return parser(userAgent);
 }
 
 export function devicePercentTraffic(pages, visits) {
     const data = [];
-    const total = visits.reduce((a, b) =>  a + b, 0);
+    const total = visits.reduce((a, b) => a + b, 0);
 
     for (const name in pages) {
         const device = pages[name];
@@ -60,7 +60,7 @@ export function groupPagesByDevices(navigationPages = [], resolve) {
                 };
             }
 
-            if (!devices[deviceBrowserName].os.names[deviceOSName]) {
+            if (!devices[deviceBrowserName].os.names[deviceOSName])  {
                 devices[deviceBrowserName].os.names[deviceOSName] = {
                     versions: new Set(),
                     visits: 0,

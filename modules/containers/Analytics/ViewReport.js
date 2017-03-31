@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import _ from 'lodash';
+import { connect } from 'react-redux';
+import Tabs from 'react-simpletabs';
 
 import reducers from '../../../reducers/';
 import { retreiveReportsIfNeeded, saveDataFromReport } from '../../../actions/';
 import Loader from '../../components/Loader';
 import Analytics from '../../components/Analytics';
 import Alert from '../../components/Alert';
-import { formatMetrics, formatDimensions, overviewData } from '../../../helpers/analytics';
+import { formatMetrics, formatDimensions, overviewData, AnalyticsCharts, getMetricsName, getChartData } from '../../../helpers/analytics';
 import BoxContent from '../../components/BoxContent';
+import Bar from '../../components/charts/Bar';
+
 
 class ViewReport extends Component {
 
@@ -63,29 +66,44 @@ class ViewReport extends Component {
 
     }
 
+    renderTotalData(name, dataArray, icon) {
+        const iconClass = `fa ${icon}`;
+
+        return (
+            <div className="p-y-xs">
+                <label className="f-w-normal">
+                    <i className={iconClass} />
+                    {name}: {dataArray[0]}
+                </label>
+                <span className="label label-success m-a-0 p-x pull-right">{dataArray[1]}</span>
+            </div>
+        );
+    }
+
     renderGlobalData() {
         const overview = overviewData(this.props.reportData);
 
         return (
             <BoxContent title='Overview of information' subtitle='Analytics report' >
-                <table className="table table-b-t">
-                    <thead>
-                        <tr>
-                            <th>Total</th>
-                            <th>Rows</th>
-                            <th>Maximums</th>
-                            <th>Mimimums</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{overview.total}</td>
-                            <td>{overview.rows}</td>
-                            <td>{overview.maximums}</td>
-                            <td>{overview.minimums}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div className="panel-body p-t">
+                    <div className="p-y-xs">
+                        <label className="f-w-normal">
+                            <i className="fa fa-newspaper-o" aria-hidden="true" />
+                            Rows
+                        </label>
+                        <span className="label label-success m-a-0 p-x pull-right">{overview.rows}</span>
+                    </div>
+                    {overview.total.map(total =>
+                        this.renderTotalData('Total', total, 'fa-line-chart')
+                    )}
+
+                    {overview.maximums.map(maximum =>
+                        this.renderTotalData('Maximums', maximum, 'fa-thermometer-full')
+                    )}
+                    {overview.minimums.map(minimum =>
+                        this.renderTotalData('Minimums', minimum, 'fa-thermometer-empty')
+                    )}
+                </div>
             </BoxContent>
         );
     }
@@ -97,76 +115,110 @@ class ViewReport extends Component {
         return (
             <table className="table table-b-t">
                 <thead>
-                <tr>
-                    {this.renderHeaderDetail()}
-                </tr>
+                    <tr>
+                        {this.renderHeaderDetail()}
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
                     {rows.map((row, index) =>
-                        <tr key={index}>
-                            {this.renderDetailData(row)}
+                        <tr key={`detail-column-${index}`}>
+                            {this.renderDetailData(row, index)}
                         </tr>
                     )}
-                </tr>
                 </tbody>
             </table>
         );
     }
 
-    renderDetailData(row) {
-        const html = [];
+    renderDetailData(row, index) {
+        const html = [<td>{index}</td>];
 
-       _.forEach(row.dimensions, (dimension) => {
-           html.push(
-                <td>{dimension}</td>
+        _.forEach(row.dimensions, (dimension) => {
+            html.push(
+                <td className="text-center">{dimension}</td>
             );
-       });
+        });
 
-       _.forEach(row.metrics[0].values, (metric) => {
-           html.push(
-                <td>{metric}</td>
+        _.forEach(row.metrics[0].values, (metric) => {
+            html.push(
+                <td className="text-center">{metric}</td>
             );
-       });
+        });
 
         return html;
     }
 
     renderHeaderDetail() {
-        const html = [];
+        const html = [<td>#</td>];
         const data = this.props.reportData;
         const report = data.result.reports[0];
         const dimensions = report.columnHeader.dimensions;
 
         _.forEach(dimensions, (dimension) => {
             html.push(
-                <th>{dimension}</th>
+                <th className="text-center">{dimension}</th>
             );
         });
 
         const metrics = report.columnHeader.metricHeader.metricHeaderEntries;
         _.forEach(metrics, (metric) => {
             html.push(
-                <th>{metric.name} ({metric.type})</th>
+                <th className="text-center">{metric.name} ({metric.type})</th>
             );
         });
 
         return html;
     }
 
-    reportData() {
-        return (
-        <div className="col-md-12">
-            <div className="col-md-8">
-                <BoxContent title='Detail information' subtitle='Analytics report' >
-                    {this.renderDetailReport()}
-                </BoxContent>
-            </div>
+    renderCharts() {
+        const dataFormatted = AnalyticsCharts(this.props.reportData);
+        const metricsName = getMetricsName(this.props.reportData);
+        const metricsChartData = getChartData(metricsName, dataFormatted);
+        console.log(dataFormatted);
+        console.log(metricsChartData);
 
-            <div className="col-md-4">
-                {this.renderGlobalData()}
+        return Object.keys(dataFormatted).map((dimensionName) => {
+            return (
+                <BoxContent title={dimensionName}>
+                    {metricsName.map((metric) => {
+                        return (
+                            <div className="col-md-6">
+                                <Bar
+                                    data={{}}
+                                    label={metric}
+                                    labelsArray={Object.keys(dataFormatted[dimensionName])}
+                                    dataArray={metricsChartData[metric]}
+                                />
+                            </div>
+                        );
+                    })}
+                </BoxContent>
+            );
+        });
+    }
+
+    reportData() {
+
+        return (
+            <div className="col-md-12">
+                <Tabs>
+                    <Tabs.Panel title='Detail metrics'>
+                        <div className="col-md-8">
+                            <BoxContent title='Detail information' subtitle='Analytics report' >
+                                {this.renderDetailReport()}
+                            </BoxContent>
+                        </div>
+
+                        <div className="col-md-4">
+                            {this.renderGlobalData()}
+                        </div>
+                    </Tabs.Panel>
+
+                    <Tabs.Panel title='Dimensions charts'>
+                        {this.renderCharts()}
+                    </Tabs.Panel>
+                </Tabs>
             </div>
-        </div>
         );
     }
 

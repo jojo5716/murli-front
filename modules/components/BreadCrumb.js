@@ -84,7 +84,7 @@ class BreadCrumb extends React.Component {
                         <div className="col-md-6">
                             <div className="form-group has-feedback">
                                 <label className="control-label">
-                                    Check-In Date
+                                    Start Date
                                 </label>
                                 <DatePicker
                                     id="checkInInput"
@@ -99,7 +99,7 @@ class BreadCrumb extends React.Component {
                         <div className="col-md-6">
                             <div className="form-group has-feedback">
                                 <label className="control-label">
-                                    Check-Out Date
+                                    End Date
                                 </label>
                                 <DatePicker
                                     id="checkInOut"

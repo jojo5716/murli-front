@@ -6,14 +6,23 @@ import { Bar } from 'react-chartjs-2';
 export default class PieComponent extends React.Component {
 
     render() {
-        const dataValues = Object.keys(this.props.data).map((key) => {
+        let dataValues = Object.keys(this.props.data).map((key) => {
             return this.props.data[key];
         });
+        let labels = Object.keys(this.props.data);
+
+        if (this.props.labelsArray) {
+            labels = this.props.labelsArray;
+        }
+
+        if (this.props.dataArray) {
+            dataValues = this.props.dataArray;
+        }
 
         const data = {
-            labels: Object.keys(this.props.data),
+            labels: labels,
             datasets: [{
-                label: 'Visits',
+                label: this.props.label || 'visits',
                 backgroundColor: 'rgba(255,99,132,0.2)',
                 borderColor: 'rgba(255,99,132,1)',
                 borderWidth: 1,
