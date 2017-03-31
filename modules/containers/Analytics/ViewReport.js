@@ -187,7 +187,7 @@ class ViewReport extends Component {
                                     data={{}}
                                     label={metric}
                                     labelsArray={Object.keys(dataFormatted[dimensionName])}
-                                    dataArray={metricsChartData[metric]}
+                                    dataArray={metricsChartData[dimensionName][metric]}
                                 />
                             </div>
                         );
