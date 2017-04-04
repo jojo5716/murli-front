@@ -47,19 +47,19 @@ class Home extends React.Component {
         return (
             <div className="row">
                 <div className="col-md-3">
-                    { totalBookings }
+                    {totalBookings}
                 </div>
 
                 <div className="col-md-3">
-                    { totalAmountBookings }
+                    {totalAmountBookings}
                 </div>
 
                 <div className="col-md-3">
-                    { totalRoomsBookings }
+                    {totalRoomsBookings}
                 </div>
 
                 <div className="col-md-3">
-                    { totalCountriesBooking }
+                    {totalCountriesBooking}
                 </div>
             </div>
         );
@@ -178,22 +178,22 @@ class Home extends React.Component {
                     <Collapser title={titleCollapser}>
                         <table className="table rs-table table-striped table-hover table-b-t">
                             <thead>
-                            <tr>
-                                <th>Room code</th>
-                                <th>Total</th>
-                                <th>Check in</th>
-                                <th>Check in</th>
-                                <th>Nights</th>
-                            </tr>
+                                <tr>
+                                    <th>Room code</th>
+                                    <th>Total</th>
+                                    <th>Check in</th>
+                                    <th>Check in</th>
+                                    <th>Nights</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            {rooms.map((room, index) =>
-                                <tr key={index}>
-                                    {room.map((info) =>
-                                        <td>{info}</td>
-                                    )}
-                                </tr>
-                            )}
+                                {rooms.map((room, index) =>
+                                    <tr key={index}>
+                                        {room.map(info =>
+                                            <td>{info}</td>
+                                        )}
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </Collapser>
@@ -211,49 +211,49 @@ class Home extends React.Component {
 
         return (
             <div className="container-fluid">
-                <Alert message="All amounts are expressed in the hotel's default currency (EUR / €)"/>
+                <Alert message="All amounts are expressed in the hotel's default currency (EUR / €)" />
 
-                { this.renderHeader(bookingsInfo) }
+                {this.renderHeader(bookingsInfo)}
                 <div className="row">
                     <div className="col-md-6">
                         <BoxContent title="Booking rooms" subtitle="Booking per room">
-                            { this.renderRoomsChart(bookingsInfo) }
+                            {this.renderRoomsChart(bookingsInfo)}
                         </BoxContent>
                     </div>
 
                     <div className="col-md-6">
                         <BoxContent title="Booking country" subtitle="Bookings by country">
-                            { this.renderCountriesChart(bookingsInfo) }
+                            {this.renderCountriesChart(bookingsInfo)}
                         </BoxContent>
                     </div>
 
                     <div className="col-md-6">
                         <BoxContent title="Booking boards" subtitle="Bookings by boards">
-                            { this.renderBoardsChart(bookingsInfo)}
+                            {this.renderBoardsChart(bookingsInfo)}
                         </BoxContent>
                     </div>
 
                     <div className="col-md-6">
                         <BoxContent title="Booking rates" subtitle="Bookings by rates">
-                            { this.renderRatesChart(bookingsInfo)}
+                            {this.renderRatesChart(bookingsInfo)}
                         </BoxContent>
                     </div>
 
                     <div className="col-md-6">
                         <BoxContent title="Booking occupancies" subtitle="Bookings by occupancies">
-                            { this.renderOccupanciesChart(bookingsInfo)}
+                            {this.renderOccupanciesChart(bookingsInfo)}
                         </BoxContent>
                     </div>
 
                     <div className="col-md-6">
                         <BoxContent title="Booking days" subtitle="Bookings by day">
-                            { this.renderBookingsDayChart(bookingsInfo)}
+                            {this.renderBookingsDayChart(bookingsInfo)}
                         </BoxContent>
                     </div>
 
                     <div className="col-md-6">
                         <BoxContent title="Booking days" subtitle="Bookings by day">
-                            { this.renderTableBookings(bookingUsers)}
+                            {this.renderTableBookings(bookingUsers)}
                         </BoxContent>
                     </div>
 
@@ -286,12 +286,11 @@ class Home extends React.Component {
 const mapStateToProps = (state) => {
     return {
         navigationPages: reducers(state).getPages.navigationPages,
-        loadingComponents: reducers(state).components.loading,
-
+        loadingComponents: reducers(state).components.loading
     };
 };
 
-const mapDispatchToProps = (dispatch) => ({ dispatch });
+const mapDispatchToProps = dispatch => ({ dispatch });
 
 export default connect(
     mapStateToProps,

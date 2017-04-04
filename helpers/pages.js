@@ -99,24 +99,24 @@ export function getSectionsVisits(devicesPages) {
     };
 
     _.forEach(Object.keys(devicesPages), (device) => {
-       _.forEach(Object.keys(devicesPages[device]), (os) => {
-           _.forEach(Object.keys(devicesPages[device][os]), (version) => {
-               _.forEach(Object.keys(devicesPages[device][os][version]), (section) => {
-                   if (!sections[section].devices[device]) {
-                       sections[section].devices[device] = {};
-                   }
+        _.forEach(Object.keys(devicesPages[device]), (os) => {
+            _.forEach(Object.keys(devicesPages[device][os]), (version) => {
+                _.forEach(Object.keys(devicesPages[device][os][version]), (section) => {
+                    if (!sections[section].devices[device]) {
+                        sections[section].devices[device] = {};
+                    }
 
-                   if (!sections[section].devices[device][os]) {
-                       sections[section].devices[device][os] = 0;
-                   }
+                    if (!sections[section].devices[device][os]) {
+                        sections[section].devices[device][os] = 0;
+                    }
 
-                   const sectionsDevice = devicesPages[device][os][version][section];
-                   const totalURLVisits = Object.values(sectionsDevice).reduce((a, b) => a + b, 0);
-                   sections[section].total += totalURLVisits;
-                   sections[section].devices[device][os] += totalURLVisits;
-               });
-           });
-       });
+                    const sectionsDevice = devicesPages[device][os][version][section];
+                    const totalURLVisits = Object.values(sectionsDevice).reduce((a, b) => a + b, 0);
+                    sections[section].total += totalURLVisits;
+                    sections[section].devices[device][os] += totalURLVisits;
+                });
+            });
+        });
     });
 
     return sections;
