@@ -7,7 +7,7 @@
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
     "start:dev": "webpack-dev-server --inline --content-base public/ --history-api-fallback",
     "start:debug": "NODE_ENV=debugger  webpack-dev-server --inline --content-base public/ --history-api-fallback",
-    "start:prod": "webpack && node server.js",
+    "start:prod": "webpack && pm2 start server.js",
     "lint": "eslint ."
   },
   "repository": {
