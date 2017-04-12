@@ -1,39 +1,22 @@
 import _ from 'lodash';
 import moment from 'moment';
 
-function bookingsToJSON(bookings) {
-    return _.forEach(bookings, (booking) => {
-        const bookingRooms = booking.rooms || '';
-
-        try {
-            const rooms = bookingRooms ? bookingRooms.replace(/&quot;/g, '"') : null;
-            booking.rooms = JSON.parse(rooms);
-        } catch (err) {
-            console.log(err);
-        }
-    });
-}
 
 export function usersWithBookings(navigationPages) {
-    const bookingsRegistered = [];
+    const bookings = [];
 
-    const rooms = _.filter(navigationPages, (navPage) => {
-        if (navPage.user.bookings.length > 0) {
-            const bookings = _.filter(navPage.user.bookings, (booking) => {
-                if (booking.bookingStatus === 'CONF' && !(bookingsRegistered.includes(booking.bookingCode))) {
-                    bookingsRegistered.push(booking.bookingCode);
-                    return booking;
+    _.forEach(navigationPages, (navPage) => {
+        if (navPage.bookings.length > 0) {
+
+            _.forEach(navPage.bookings, (booking) => {
+                if (booking.rooms) {
+                    bookings.push(navPage);
                 }
             });
-
-            if (bookings.length > 0) {
-                navPage.user.bookings = bookingsToJSON(bookings);
-                return navPage;
-            }
         }
     });
 
-    return rooms;
+    return bookings;
 }
 
 function saveBookingMetric(metric, key, total, bookings) {
@@ -45,7 +28,7 @@ function saveBookingMetric(metric, key, total, bookings) {
     bookings[metric][key].quantity += 1;
 }
 
-export function formatBookings(navPages) {
+export function formatBookings(userBookings) {
     const bookings = {
         totalAmount: 0,
         totalBookings: 0,
@@ -59,28 +42,35 @@ export function formatBookings(navPages) {
         info: []
     };
 
-    _.forEach(navPages, (navPage) => {
-        _.forEach(navPage.user.bookings, (booking) => {
-            bookings.totalBookings += 1;
+    _.forEach(userBookings, (navPage) => {
+        bookings.totalBookings += navPage.bookings.length;
+        let totalUserBooking = 0;
 
-            if (booking.rooms) {
-                _.forEach(booking.rooms, (room) => {
-                    const total = room.amount;
-                    const createAt = moment(navPage.user.createAt).format('YYYY-MM-DD');
-                    bookings.totalAmount += total;
-                    bookings.totalRooms += 1;
-                    saveBookingMetric('rooms', room.roomCode, total, bookings);
-                    saveBookingMetric('boards', room.boardCode, total, bookings);
-                    saveBookingMetric('rates', room.rateCode, total, bookings);
-                    saveBookingMetric('occupancies', room.occupancyCode, total, bookings);
+        if (navPage.bookings) {
+            const createAt = moment(navPage.user.createAt).format('YYYY-MM-DD');
 
-                    saveBookingMetric('days', createAt, total, bookings);
-                    saveBookingMetric('countries', navPage.user.country, total, bookings);
-                });
-            }
-        });
+            _.forEach(navPage.bookings, (booking) => {
+              const rooms = booking.rooms || [];
+
+              _.forEach(rooms, (room) => {
+                const total = room.amount;
+                totalUserBooking += room.amount;
+
+                bookings.totalAmount += total;
+                bookings.totalRooms += 1;
+
+                saveBookingMetric('rooms', room.roomCode, total, bookings);
+                saveBookingMetric('boards', room.boardCode, total, bookings);
+                saveBookingMetric('rates', room.rateCode, total, bookings);
+                saveBookingMetric('occupancies', room.occupancyCode, total, bookings);
+                saveBookingMetric('days', createAt, total, bookings);
+              });
+          });
+          saveBookingMetric('countries', navPage.user.country, totalUserBooking, bookings);
+        }
     });
 
+    console.log(bookings);
     return bookings;
 }
 

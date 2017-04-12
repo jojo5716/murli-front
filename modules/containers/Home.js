@@ -168,9 +168,8 @@ class Home extends React.Component {
 
     renderTableBookings(bookingUsers) {
         const html = [];
-
         _.forEach(bookingUsers, (page) => {
-            _.forEach(page.user.bookings, (booking) => {
+            _.forEach(page.bookings, (booking) => {
                 const rooms = roomsTable(booking);
                 const titleCollapser = `${booking.bookingCode} - ${booking.bookingStatus}`;
 
