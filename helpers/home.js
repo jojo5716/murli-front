@@ -65,12 +65,11 @@ export function formatBookings(userBookings) {
                 saveBookingMetric('occupancies', room.occupancyCode, total, bookings);
                 saveBookingMetric('days', createAt, total, bookings);
               });
+              saveBookingMetric('countries', navPage.user.country, totalUserBooking, bookings);
           });
-          saveBookingMetric('countries', navPage.user.country, totalUserBooking, bookings);
         }
     });
 
-    console.log(bookings);
     return bookings;
 }
 

@@ -71,11 +71,12 @@ export function groupPagesByDevices(navigationPages = [], resolve) {
             devices[deviceBrowserName].browser.visits += 1;
             devices[deviceBrowserName].os.names[deviceOSName].visits += 1;
             devices[deviceBrowserName].os.names[deviceOSName].versions.add(deviceOSVersion);
-
-            if (user.bookings.length > 0) {
-                devices[deviceBrowserName].os.names[deviceOSName].bookings.push(user.bookings);
+            
+            if (navigationPage.bookings.length > 0) {
+                devices[deviceBrowserName].os.names[deviceOSName].bookings.push(navigationPage.bookings);
             }
         }
+
     }
 
     resolve(devices);

@@ -4,7 +4,6 @@ import { getUserAgentInfo } from './devices';
 
 export function groupBySections(navigationPages, resolve) {
     const devicesPages = {};
-    const bookings = [];
 
     _.forEach(navigationPages, (navPage) => {
         const userAgent = getUserAgentInfo(navPage.user.dataUser.userAgent);
@@ -14,22 +13,18 @@ export function groupBySections(navigationPages, resolve) {
         const osVersion = userAgent.os.version;
 
         initializeDeviceTree(userAgent, devicesPages);
-        _.forEach(navPage.pages, (page) => {
-            const deviceTree = devicesPages[browserName][osName][osVersion];
-            const section = detectSectionForURL(page.url);
+        const deviceTree = devicesPages[browserName][osName][osVersion];
 
-            if (section === 'booking') {
-                _.forEach(navPage.user.bookings, (booking) => {
-                    if (booking.bookingStatus === 'CONF') {
-                        if (!bookings.includes(booking.bookingCode)) {
-                            groupBySection(page.url, section, deviceTree);
-                        }
-                        bookings.push(booking.bookingCode);
-                    }
-                });
-            } else {
-                groupBySection(page.url, section, deviceTree);
+
+        _.forEach(navPage.pages, (page) => {
+            const section = detectSectionForURL(page.url);
+            if (section !== 'booking') {
+              groupBySection(page.url, section, deviceTree);
             }
+        });
+
+        _.forEach(navPage.bookings, (booking) => {
+            groupBySection(booking.bookingCode, 'booking', deviceTree);
         });
     });
 

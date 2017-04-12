@@ -32,6 +32,7 @@ class PerPagesDevice extends React.Component {
     }
 
     renderTabs(totalPerSection) {
+    
         return (
             <Tabs>
                 <Tabs.Panel title='Availability pages'>
