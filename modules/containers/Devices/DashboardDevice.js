@@ -2,13 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import reducers from '../../../reducers/';
 
-import {
-    generateColorsToPie,
-    devicePercentTraffic,
-    getVisitFromPages,
-    getOSNameFromPages,
-    groupPagesByDevices
-} from '../../../helpers/devices';
+import devicesHelper from '../../../helpers/devices';
 
 // Charts modules
 import Pie from '../../components/charts/Pie';
@@ -80,17 +74,17 @@ class DashboardDevice extends React.Component {
     }
 
     renderPage() {
-        const devicesData = groupPagesByDevices(this.props.navigationPages);
+        const devicesData = devicesHelper.groupPagesByDevices(this.props.navigationPages);
 
         // Devices browsers
         const deviceNames = Object.keys(devicesData);
-        const colors = generateColorsToPie(Object.keys(devicesData).length);
-        const visits = getVisitFromPages(devicesData);
+        const colors = devicesHelper.generateColorsToPie(Object.keys(devicesData).length);
+        const visits = devicesHelper.getVisitFromPages(devicesData);
 
         // Top OS names
-        const osVisits = getOSNameFromPages(devicesData);
+        const osVisits = devicesHelper.getOSNameFromPages(devicesData);
 
-        const pieDataPercent = devicePercentTraffic(devicesData, visits);
+        const pieDataPercent = devicesHelper.devicePercentTraffic(devicesData, visits);
         const percentTableBrowsers = this.generateBrowserTable(pieDataPercent);
         const percentTableOSs = this.generateOSTable(devicesData);
 

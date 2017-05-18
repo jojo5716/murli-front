@@ -14,7 +14,7 @@ const plugins = [
     ),
     // Debug the size of bundles
     new DuplicatePackageCheckerPlugin(),
-    new Visualizer()
+    // new Visualizer()
 ];
 
 if (environment === 'production') {
