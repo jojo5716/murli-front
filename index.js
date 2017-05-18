@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import createLogger from 'redux-logger';
 
-// Components
+// Components pages
 import App from './modules/index';
 import Home from './modules/containers/Home';
 import About from './modules/containers/About';
@@ -22,7 +22,6 @@ import ViewReport from './modules/containers/Analytics/ViewReport';
 import reducers from './reducers';
 
 const middleware = [thunk];
-
 
 if (process.env.NODE_ENV === 'debugger') {
     middleware.push(createLogger());

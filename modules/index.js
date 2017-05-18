@@ -12,13 +12,6 @@ import EmptyData from './components/EmptyData';
 
 
 class App extends React.Component {
-
-    componentDidMount() {
-        if (this.props.loadingComponents) {
-            this.props.dispatch(loadedComponents());
-        }
-    }
-
     renderProjectNotFound() {
         return (
             <EmptyData title="No project found" message="Please select a project"/>
@@ -64,7 +57,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => ({ dispatch });
+const mapDispatchToProps = dispatch => ({ dispatch });
 
 
 export default connect(

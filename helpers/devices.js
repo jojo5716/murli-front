@@ -2,7 +2,22 @@ import parser from 'user-agent-parser';
 
 import { generateColor } from './utils';
 
-export function generateColorsToPie(length) {
+module.exports = {
+    generateColorsToPie,
+    devicePercentTraffic,
+    groupPagesByDevices,
+    getVisitFromPages,
+    getOSNameFromPages
+};
+
+
+/**
+ * Generate colors hexadecimals
+ *
+ * @param {int} length
+ * @returns {array} colors
+ */
+function generateColorsToPie(length) {
     const colors = [];
 
     for (let i = 0; i < length; i += 1) {
@@ -12,11 +27,14 @@ export function generateColorsToPie(length) {
     return colors;
 }
 
-export function getUserAgentInfo(userAgent) {
-    return parser(userAgent);
-}
-
-export function devicePercentTraffic(pages, visits) {
+/**
+ * Generate object with visits and percent by devices
+ *
+ * @param {Array} pages
+ * @param {Array} visits
+ * @returns {Array} percent of visits by devices
+ */
+function devicePercentTraffic(pages, visits) {
     const data = [];
     const total = visits.reduce((a, b) => a + b, 0);
 
@@ -34,8 +52,7 @@ export function devicePercentTraffic(pages, visits) {
     return data;
 }
 
-export function groupPagesByDevices(navigationPages = [], resolve) {
-
+function groupPagesByDevices(navigationPages = []) {
     const devices = {};
 
     for (let navigationIndex = 0; navigationIndex < navigationPages.length; navigationIndex += 1) {
@@ -44,7 +61,7 @@ export function groupPagesByDevices(navigationPages = [], resolve) {
         const user = navigationPage.user;
 
         for (let i = 0; i < pages.length; i += 1) {
-            const userAgentData = getUserAgentInfo(user.dataUser.userAgent);
+            const userAgentData = parser(user.dataUser.userAgent);
             const deviceBrowserName = userAgentData.browser.name || 'Unknown';
             const deviceOSName = userAgentData.os.name || 'Unknown';
             const deviceOSVersion = userAgentData.os.version || 'Unknown';
@@ -60,7 +77,7 @@ export function groupPagesByDevices(navigationPages = [], resolve) {
                 };
             }
 
-            if (!devices[deviceBrowserName].os.names[deviceOSName])  {
+            if (!devices[deviceBrowserName].os.names[deviceOSName]) {
                 devices[deviceBrowserName].os.names[deviceOSName] = {
                     versions: new Set(),
                     visits: 0,
@@ -71,18 +88,17 @@ export function groupPagesByDevices(navigationPages = [], resolve) {
             devices[deviceBrowserName].browser.visits += 1;
             devices[deviceBrowserName].os.names[deviceOSName].visits += 1;
             devices[deviceBrowserName].os.names[deviceOSName].versions.add(deviceOSVersion);
-            
+
             if (navigationPage.bookings.length > 0) {
                 devices[deviceBrowserName].os.names[deviceOSName].bookings.push(navigationPage.bookings);
             }
         }
-
     }
 
-    resolve(devices);
+    return devices;
 }
 
-export function getVisitFromPages(pages) {
+function getVisitFromPages(pages) {
     const visits = [];
     for (const page in pages) {
         visits.push(pages[page].browser.visits);
@@ -90,7 +106,7 @@ export function getVisitFromPages(pages) {
     return visits;
 }
 
-export function getOSNameFromPages(pages) {
+function getOSNameFromPages(pages) {
     const osNames = {};
 
     for (const page in pages) {

@@ -4,7 +4,7 @@ export const hourMightnight = 'T00:00:00.000Z';
 export const hourEndDay = 'T23:59:59.599Z';
 
 // API URLs
-const url = 'http://qa.roiback.com:8000/api/v1';
+const url = 'http://localhost:8000/api/v1';
 
 export const apiURL = {
     base: url,

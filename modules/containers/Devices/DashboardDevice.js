@@ -6,10 +6,9 @@ import {
     generateColorsToPie,
     devicePercentTraffic,
     getVisitFromPages,
-    getOSNameFromPages
+    getOSNameFromPages,
+    groupPagesByDevices
 } from '../../../helpers/devices';
-
-import { formatDevicesIfNeeded } from '../../../actions/';
 
 // Charts modules
 import Pie from '../../components/charts/Pie';
@@ -80,7 +79,9 @@ class DashboardDevice extends React.Component {
         });
     }
 
-    renderPage(devicesData) {
+    renderPage() {
+        const devicesData = groupPagesByDevices(this.props.navigationPages);
+
         // Devices browsers
         const deviceNames = Object.keys(devicesData);
         const colors = generateColorsToPie(Object.keys(devicesData).length);
@@ -157,31 +158,13 @@ class DashboardDevice extends React.Component {
         );
     }
 
-    componentDidMount() {
-        this.refreshData();
-    }
-
-    componentDidUpdate(prevProps) {
-
-        if ((prevProps.navigationPages !== this.props.navigationPages) || (
-                prevProps.navigationPages.length === 0 && this.props.navigationPages.length === 0)) {
-            this.refreshData();
-        }
-    }
-
-    refreshData() {
-        this.props.dispatch(formatDevicesIfNeeded());
-    }
-
     render() {
-        const loading = this.props.loadingComponents;
-
-        if (loading) {
+        if (this.props.loadingComponents) {
             return <Loader />;
         }
 
         if (this.props.navigationPages.length > 0) {
-            return this.renderPage(this.props.devicesData);
+            return this.renderPage();
         }
 
         return (
