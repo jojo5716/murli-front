@@ -7,8 +7,7 @@ import reducers from '../../../reducers/';
 import BoxChart from '../../components/BoxChart';
 import BoxContent from '../../components/BoxContent';
 
-import { formatDevicesPagesIfNeeded } from '../../../actions/';
-import { getSectionsVisits } from '../../../helpers/pages';
+import { getSectionsVisits, groupBySections } from '../../../helpers/pages';
 import Loader from '../../components/Loader';
 import EmptyData from '../../components/EmptyData';
 import GoogleChart from '../../components/charts/GoogleChart';
@@ -16,23 +15,7 @@ import GoogleChart from '../../components/charts/GoogleChart';
 
 class PerPagesDevice extends React.Component {
 
-    refreshData() {
-        this.props.dispatch(formatDevicesPagesIfNeeded());
-    }
-
-    componentDidMount() {
-        this.refreshData();
-    }
-
-    componentDidUpdate(prevProps) {
-        if ((prevProps.navigationPages !== this.props.navigationPages) || (
-            prevProps.navigationPages.length === 0 && this.props.navigationPages.length === 0)) {
-            this.refreshData();
-        }
-    }
-
     renderTabs(totalPerSection) {
-    
         return (
             <Tabs>
                 <Tabs.Panel title='Availability pages'>
@@ -156,7 +139,7 @@ class PerPagesDevice extends React.Component {
     }
 
     renderPage() {
-        const totalPerSection = getSectionsVisits(this.props.devicesPagesData);
+        const totalPerSection = getSectionsVisits(groupBySections(this.props.navigationPages));
 
         return (
             <div className="container-fluid">
@@ -174,15 +157,11 @@ class PerPagesDevice extends React.Component {
     }
 
     render() {
-        const loading = this.props.loadingComponents;
-        const pagesData = this.props.devicesPagesData;
-        const havePagesData = Object.keys(pagesData).length > 0;
-
-        if (loading) {
+        if (this.props.loadingComponents) {
             return <Loader/>;
         }
 
-        if (this.props.navigationPages.length > 0 && havePagesData) {
+        if (this.props.navigationPages.length > 0 ) {
             return this.renderPage();
         }
 

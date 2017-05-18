@@ -1,26 +1,28 @@
 import _ from 'lodash';
-import { getUserAgentInfo } from './devices';
+import parser from 'user-agent-parser';
 
 
-export function groupBySections(navigationPages, resolve) {
-    const devicesPages = {};
+
+export function groupBySections(navigationPages) {
+    let devicesPages = {};
 
     _.forEach(navigationPages, (navPage) => {
-        const userAgent = getUserAgentInfo(navPage.user.dataUser.userAgent);
-
+        const userAgent = parser(navPage.user.dataUser.userAgent);
         const browserName = userAgent.browser.name;
         const osName = userAgent.os.name;
         const osVersion = userAgent.os.version;
 
-        initializeDeviceTree(userAgent, devicesPages);
+        devicesPages = initializeDeviceTree(userAgent, devicesPages);
         const deviceTree = devicesPages[browserName][osName][osVersion];
 
 
         _.forEach(navPage.pages, (page) => {
             const section = detectSectionForURL(page.url);
+
             if (section !== 'booking') {
               groupBySection(page.url, section, deviceTree);
             }
+
         });
 
         _.forEach(navPage.bookings, (booking) => {
@@ -28,7 +30,7 @@ export function groupBySections(navigationPages, resolve) {
         });
     });
 
-    resolve(devicesPages);
+    return devicesPages;
 }
 
 function initializeDeviceTree(userAgent, devicesPages) {
@@ -47,6 +49,8 @@ function initializeDeviceTree(userAgent, devicesPages) {
     if (!devicesPages[browserName][osName][osVersion]) {
         devicesPages[browserName][osName][osVersion] = {};
     }
+
+    return devicesPages;
 }
 
 function detectSectionForURL(url) {
